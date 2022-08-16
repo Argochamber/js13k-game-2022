@@ -1,6 +1,18 @@
 {
-  "name": "test_kontra",
+  "name": "js13k_game_2022",
   "version": "1.0.0",
+  "author": "sigmasoldi3r",
+  "contributors": [
+    {
+      "name": "Alberto",
+      "url": "https://github.com/dyametr"
+    },
+    {
+      "name": "Pablo",
+      "email": "pablobc.1995@gmail.com",
+      "url": "https://github.com/sigmasoldi3r"
+    }
+  ],
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
@@ -23,6 +35,7 @@
   "scripts": {
     "start": "rollup -c -w",
     "build": "rollup -c",
+    "serve": "serve dist -l 8080",
     "test": "node test.js"
   }
 }
