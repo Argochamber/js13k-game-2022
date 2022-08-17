@@ -968,11 +968,6 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-kontra@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/kontra/-/kontra-8.0.0.tgz#661b46b650ed86c9c1a71e723b54dc2a7ab1e30b"
-  integrity sha512-7Go/K4S+6gtyillSKSkSlNq46neuIWGvof9PYyzBwiBKGrs+1GHzsDknaeIID3GulV+sK1oKcV0hB2CyyO7ePQ==
-
 livereload-js@^3.3.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/livereload-js/-/livereload-js-3.4.1.tgz#ba90fbc708ed1b9a024bb89c4ee12c96ea03d66f"
