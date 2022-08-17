@@ -3,7 +3,7 @@ import babel from "@rollup/plugin-babel";
 import ts from "@rollup/plugin-typescript";
 import serve from "rollup-plugin-serve";
 import livereload from "rollup-plugin-livereload";
-import copy from "rollup-plugin-copy";
+import copy from "rollup-plugin-copy";import strip from '@rollup/plugin-strip';
 
 const DIST_FOLDER = "./dist";
 const WATCH = process.env.ROLLUP_WATCH
@@ -31,6 +31,9 @@ export default {
     ts(),
     copy({
       targets: [{ src: "static/**/*", dest: "dist" }],
+    }),
+    strip({
+      functions: ['html']
     }),
     ...WATCH,
   ],
