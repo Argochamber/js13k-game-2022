@@ -1,4 +1,4 @@
-# Necrerium
+# Necrium
 
 The imperium of the dead.
 
