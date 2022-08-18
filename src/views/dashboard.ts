@@ -6,7 +6,10 @@ export const dashboard = (game: Game) => {
     <div>
       The ${game.name} empire
       <hr />
-      <p>Hello World!</p>
+      <div>
+        <p>Hello World!</p>
+        <p>This is your necromancy warlock</p>
+      </div>
     </div>
   `
 }
