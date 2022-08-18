@@ -2,7 +2,13 @@ import { html, store } from './lib'
 import { dashboard } from './views/dashboard'
 
 // Available tabs.
-export const TABS = ['dashboard', 'resources', 'factories'] as const
+export const TABS = [
+  'dashboard',
+  'resources',
+  'factories',
+  'islands',
+  'incursions',
+] as const
 export type Tab = typeof TABS[number]
 
 /**
@@ -43,6 +49,8 @@ export class Game {
       <div
         style="${`
           display: flex;
+          width: calc(100% - 1rem);
+          height: calc(100% - 1rem);
         `}"
       >
         <div
@@ -50,16 +58,18 @@ export class Game {
             border-right: 1px solid gray;
             padding-right: 1rem;
             margin-right: 1rem;
+            margin-left: 1rem;
           `}"
         >
           ${this.renderTabs()}
         </div>
-        <div>${this.renderTabContent()}</div>
+        <div style="flex: 1">${this.renderTabContent()}</div>
         <div
           style="${`
             border-left: 1px solid gray;
             padding-left: 1rem;
             margin-left: 1rem;
+            margin-right: 1rem;
           `}"
         >
           c
@@ -75,7 +85,22 @@ export class Game {
           border-bottom: 1px solid gray;
         `}"
       >
-        ${TABS.map(_ => html` <div>${_}</div> `).join('')}
+        <div>Options</div>
+        <hr />
+        <div
+          style="${`
+            display: flex;
+            flex-direction: column;
+          `}"
+        >
+          ${TABS.map(
+            _ => html`
+              <button class="${_ === this.tab ? 'btn-disabled' : ''}">
+                ${_}
+              </button>
+            `
+          ).join('')}
+        </div>
       </div>
     `
   }

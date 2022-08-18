@@ -5,6 +5,7 @@ export const render = (children: string) => {
     <button
       style="${`
         position: fixed;
+        opacity: 0.5;
       `}"
       onclick="(localStorage.clear(),location.reload())"
     >

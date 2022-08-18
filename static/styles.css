@@ -5,7 +5,6 @@ button {
   font-family: 'Silkscreen', sans-serif;
   border-radius: 0;
 }
-
 html,
 body {
   border: 0;
@@ -15,4 +14,12 @@ body {
   height: 100vh;
   color: white;
   background-color: black;
+}
+button {
+  cursor: pointer;
+}
+button.btn-disabled {
+  cursor: default;
+  background-color: gray;
+  border-style: inset;
 }
