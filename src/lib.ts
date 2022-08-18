@@ -34,6 +34,10 @@ export const $ = <E extends HTMLElement, R>(
     return block(r as any)
   }
 }
+
+/**
+ * Local database access object.
+ */
 export const store = {
   set<T>(key: string, value: T) {
     const data = JSON.parse(localStorage.getItem('database') ?? '{}')

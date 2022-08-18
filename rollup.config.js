@@ -6,6 +6,7 @@ import livereload from 'rollup-plugin-livereload'
 import copy from 'rollup-plugin-copy'
 import { uglify } from 'rollup-plugin-uglify'
 import html from 'rollup-plugin-minify-html-literals'
+import { string } from 'rollup-plugin-string'
 
 const DIST_FOLDER = './dist'
 const WATCH = process.env.ROLLUP_WATCH
@@ -25,7 +26,14 @@ export default {
   },
   plugins: [
     node_resolve(),
-    babel(),
+    string({
+      include: '**/*.txt',
+    }),
+    babel({
+      babelHelpers: {
+        bundled: true,
+      },
+    }),
     ts(),
     copy({
       targets: [{ src: 'static/**/*', dest: 'dist' }],
