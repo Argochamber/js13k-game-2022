@@ -9,7 +9,7 @@
  * @param block The block function that catches the immediate.
  * @returns Any value, if needed, or void.
  */
-export const $ = <T, R>(value: T, block: (immediate: T) => R) => block(value)
+export const Let = <T, R>(value: T, block: (immediate: T) => R) => block(value)
 
 /**
  * Wraps the given element (if any).
@@ -17,16 +17,37 @@ export const $ = <T, R>(value: T, block: (immediate: T) => R) => block(value)
  * @param block The block to run with that element.
  * @returns Any value, if needed.
  */
-export const $e = <R>(id: string, block: (immediate: HTMLElement) => R) =>
-  block(document.getElementById(id))
-
-export const $u = <T>(key: string, value: T) => {
-  const data = JSON.parse(localStorage.getItem('$?') ?? '{}')
-  data[key] = value
-  localStorage.setItem('$?', JSON.stringify(data))
+export type $ =
+  | (<E extends HTMLElement>(selector: string) => NodeListOf<E>)
+  | (<E extends HTMLElement, R>(
+      selector: string,
+      block: (result: NodeListOf<E>) => R
+    ) => R)
+export const $ = <E extends HTMLElement, R>(
+  selector: string,
+  block?: (result: NodeListOf<E>) => R
+) => {
+  const r = document.querySelectorAll(selector)
+  if (block == null) {
+    return r
+  } else {
+    return block(r as any)
+  }
 }
-
-export const $r = <T>(key: string) =>
-  JSON.parse(localStorage.getItem('$?') ?? '{}')[key] as T | undefined
+export const store = {
+  set<T>(key: string, value: T) {
+    const data = JSON.parse(localStorage.getItem('database') ?? '{}')
+    data[key] = value
+    localStorage.setItem('database', JSON.stringify(data))
+  },
+  get<T>(key: string) {
+    return JSON.parse(localStorage.getItem('database') ?? '{}')[key] as
+      | T
+      | undefined
+  },
+  hasData() {
+    return localStorage.getItem('database') != null
+  },
+}
 
 export const html = String.raw

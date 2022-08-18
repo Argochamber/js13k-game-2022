@@ -1,34 +1,72 @@
-import { $e, $r, $u, html } from './lib'
+import { $, store, html } from './lib'
+
+const getAge = () => {
+  const origin = store.get<number>('empire.age')
+  const today = Date.now()
+  const age = (today - origin) / 24000
+  const day = Math.floor(age)
+  return {
+    age,
+    day,
+    hour: Math.floor((age - day) * 24),
+  }
+}
+
+const uClock = () => {
+  const { day, hour } = getAge()
+  $('#age', ([_]) => {
+    _.innerHTML = html`Your empire is ${day} day(s) and ${hour} hour(s) old`
+  })
+}
 
 const dashboard = () => {
-  $e('views', _ => {
-    _.innerHTML = html`<h1>Main Menu!</h1>`
+  const name = store.get<string>('empire.name')
+  const clk = setInterval(uClock, 1000)
+  $('#views', ([_]) => {
+    _.innerHTML = html`
+      <h2>${name}</h2>
+      <p id="age"></p>
+    `
+    uClock()
   })
 }
 
 const tryGoDashboard = () => {
-  $e('e-name', (_: HTMLInputElement) => {
+  $<HTMLInputElement, void>('#e-name', ([_]) => {
     if (_.value.trim() == '') {
       alert('Empire name cannot be empty.')
     } else {
-      $u('empire.name', _.value.trim())
+      // INITIALIZE THE DATABASE
+      store.set('empire.name', _.value.trim())
+      store.set('empire.age', Date.now())
+      store.set('empire.alma', 1000)
       dashboard()
     }
   })
 }
 
-$e('root', _ => {
+const rst = () => {
+  localStorage.clear()
+  location.reload()
+}
+
+$('#root', ([_]) => {
   _.style.fontFamily = 'sans'
+  _.style.padding = '1rem'
+  _.style.display = 'flex'
   _.innerHTML = html`
     <div>
-      <h1>Necrium <small>prototype</small></h1>
+      <h1>
+        Necrium
+        <small>prototype <button onclick="${rst.name}()">reset</button></small>
+      </h1>
       <div id="views"></div>
     </div>
   `
-  if ($r('empire.name')) {
+  if (store.hasData()) {
     dashboard()
   } else {
-    $e('views', _ => {
+    $('#views', ([_]) => {
       _.innerHTML = html`
         <div>
           Enter a name for your empire:
