@@ -1,4 +1,12 @@
 html,
+body,
+input,
+button {
+  font-family: 'Silkscreen', sans-serif;
+  border-radius: 0;
+}
+
+html,
 body {
   border: 0;
   padding: 0;
@@ -7,5 +15,4 @@ body {
   height: 100vh;
   color: white;
   background-color: black;
-  font-family: 'Silkscreen', sans-serif;
 }

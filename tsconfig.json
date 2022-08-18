@@ -13,7 +13,11 @@
     "noUnusedParameters": true,
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true
   },
   "exclude": ["node_modules"],
   "include": ["src/**/*.ts", "src/index.ts"]
