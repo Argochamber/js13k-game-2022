@@ -1,9 +1,9 @@
-import { html, Let } from "./lib"
+import { $ } from './lib'
 
-const test = (a: string) => html`<div>${a}</div>`
+const test = (a: string) => /*html*/ `<div>${a}</div>`
 
-Let(document.getElementById('root'), _ => {
-  _.innerHTML = html`
+$(document.getElementById('root'), _ => {
+  _.innerHTML = /*html*/ `
     <div>
       <h1>Hello <strong>World</strong>!</h1>
       <p>
