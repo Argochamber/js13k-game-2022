@@ -4,8 +4,8 @@ import ts from '@rollup/plugin-typescript'
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 import copy from 'rollup-plugin-copy'
-import replace from '@rollup/plugin-replace'
 import { uglify } from 'rollup-plugin-uglify'
+import html from 'rollup-plugin-minify-html-literals'
 
 const DIST_FOLDER = './dist'
 const WATCH = process.env.ROLLUP_WATCH
@@ -24,10 +24,6 @@ export default {
     include: 'src/**',
   },
   plugins: [
-    ,
-    replace({
-      values: {},
-    }),
     node_resolve(),
     babel(),
     ts(),
@@ -39,6 +35,7 @@ export default {
         comments: 'none',
       },
     }),
+    html(),
     ...WATCH,
   ],
 }
