@@ -1,4 +1,5 @@
 import { html, store } from './lib'
+import { render } from './ui'
 import { dashboard } from './views/dashboard'
 
 // Available tabs.
@@ -23,6 +24,7 @@ export class Game {
     const game = new Game()
     game.souls = 1000
     game.tab = 'dashboard'
+    ;(window as any).game = game
     return game
   }
   get name() {
@@ -78,6 +80,11 @@ export class Game {
     `
   }
 
+  goToTab(tab: Tab) {
+    this.tab = tab
+    render(this.render())
+  }
+
   private renderTabs(): string {
     return html`
       <div
@@ -93,13 +100,17 @@ export class Game {
             flex-direction: column;
           `}"
         >
-          ${TABS.map(
-            _ => html`
-              <button class="${_ === this.tab ? 'btn-disabled' : ''}">
+          ${TABS.map(_ => {
+            const active = _ === this.tab
+            return html`
+              <button
+                ${active ? '' : `onclick="game.goToTab('${_}')"`}
+                class="${active ? 'btn-disabled' : ''}"
+              >
                 ${_}
               </button>
             `
-          ).join('')}
+          }).join('')}
         </div>
       </div>
     `

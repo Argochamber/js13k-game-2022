@@ -7,8 +7,7 @@ export const dashboard = (game: Game) => {
       The ${game.name} empire
       <hr />
       <div>
-        <p>Hello World!</p>
-        <p>This is your necromancy warlock</p>
+        <div>Current soul count: ${game.souls} souls.</div>
       </div>
     </div>
   `
