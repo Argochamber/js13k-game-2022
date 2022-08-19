@@ -1,6 +1,6 @@
 import { html } from '../lib'
 
-export const TABS = ['status', 'resources', 'factories'] as const
+export const TABS = ['island', 'buildings'] as const
 
 export type Tab = typeof TABS[number]
 

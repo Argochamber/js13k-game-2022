@@ -1,5 +1,5 @@
 import { globalTabs, Tab as GlobalTab } from './fragments/globalTabs'
-import { islandsTab, Tab as IslandsTab } from './fragments/islandTabs'
+import { islandsTab, Tab as IslandsTab, TABS } from './fragments/islandTabs'
 import { html, store } from './lib'
 import { render } from './ui'
 import { dashboard } from './views/dashboard'
@@ -17,7 +17,7 @@ export class Game {
     store.set('empire.name', name)
     const game = new Game()
     game.souls = 1000
-    game.tab = 'status'
+    game.tab = TABS[0]
     ;(window as any).game = game
     return game
   }
@@ -25,7 +25,7 @@ export class Game {
     return store.get<string>('empire.name') ?? ''
   }
   get tab(): Tab {
-    return store.get<Tab>('game.tab') ?? 'status'
+    return store.get<Tab>('game.tab') ?? TABS[0]
   }
   set tab(id: Tab) {
     store.set('game.tab', id)
@@ -82,7 +82,7 @@ export class Game {
   // Internal use, the tab content fragment.
   private renderTabContent(): string {
     switch (this.tab) {
-      case 'status':
+      case TABS[0]:
         return dashboard(this)
       default:
         return ''
