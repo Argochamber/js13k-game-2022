@@ -15,7 +15,9 @@
   ],
   "main": "index.js",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "slim-js": "^5.0.10"
+  },
   "devDependencies": {
     "@babel/core": "^7.18.10",
     "@rollup/plugin-babel": "^5.3.1",

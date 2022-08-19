@@ -30,9 +30,7 @@ export default {
       include: '**/*.txt',
     }),
     babel({
-      babelHelpers: {
-        bundled: true,
-      },
+      comments: false,
     }),
     ts(),
     copy({

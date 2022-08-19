@@ -25,3 +25,10 @@ export const render = (children: string) => {
     </div>
   `
 }
+
+export const Component = (target: CustomElementConstructor) => {
+  const name = target.name
+    .replace(/[A-Z]/g, _ => `-${_.toLowerCase()}`)
+    .replace(/^-/, '')
+  customElements.define(name, target)
+}
