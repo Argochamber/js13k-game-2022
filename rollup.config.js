@@ -9,12 +9,19 @@ import html from 'rollup-plugin-minify-html-literals'
 import { string } from 'rollup-plugin-string'
 
 const DIST_FOLDER = './dist'
-const WATCH = process.env.ROLLUP_WATCH
+const ROLLUP_WATCH = !!process.env.ROLLUP_WATCH
+const WATCH = ROLLUP_WATCH
   ? [
       serve({ contentBase: DIST_FOLDER, port: 8080 }),
       livereload({ watch: DIST_FOLDER }),
     ]
-  : []
+  : [
+      uglify({
+        output: {
+          comments: 'none',
+        },
+      }),
+    ]
 
 export default {
   input: './src/index.ts',
@@ -30,16 +37,11 @@ export default {
       include: '**/*.txt',
     }),
     babel({
-      comments: false,
+      comments: ROLLUP_WATCH,
     }),
     ts(),
     copy({
       targets: [{ src: 'static/**/*', dest: 'dist' }],
-    }),
-    uglify({
-      output: {
-        comments: 'none',
-      },
     }),
     html(),
     ...WATCH,

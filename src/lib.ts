@@ -3,6 +3,12 @@
 */
 
 /**
+ * Generate a random integer between two values.
+ */
+export const rint = (from: number, to: number) =>
+  (from + Math.random() * to) >> 0
+
+/**
  * Binds a value into a temporary block, this avoids declaring the variable again,
  * saving us from reserving variable names.
  * @param value The value to be wrapped.

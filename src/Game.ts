@@ -1,5 +1,6 @@
 import { globalTabs, Tab as GlobalTab } from './fragments/globalTabs'
 import { islandsTab, Tab as IslandsTab, TABS } from './fragments/islandTabs'
+import { Island } from './Island'
 import { html, store } from './lib'
 import { render } from './ui'
 import { dashboard } from './views/dashboard'
@@ -18,9 +19,13 @@ export class Game {
     const game = new Game()
     game.souls = 1000
     game.tab = TABS[0]
+    const free = Island.getFree()
+    game.selected[0] = free.x
+    game.selected[1] = free.y
     ;(window as any).game = game
     return game
   }
+  selected: [number, number] = [0, 0]
   get name() {
     return store.get<string>('empire.name') ?? ''
   }
