@@ -1,51 +1,38 @@
-import { init, GameLoop, Sprite } from 'kontra'
+import { Game } from './Game'
+import { $, html } from './lib'
+import { render } from './ui'
 
-const Let = <T, R>(a: T, b: (t: T) => R) => b(a)
+// Try recover from local storage.
+let game = Game.recover()
 
-Let(document.getElementById('root').style, _ => {
-  _.border = '1px solid black'
-  _.backgroundColor = 'gray'
-})
+const createEmpire = () =>
+  $<HTMLInputElement, void>('#n', ([_]) => {
+    game = Game.create(_?.value.toUpperCase() ?? '<ERROR>')
+    render(app())
+  })
 
-const { canvas } = init()
+const login = () => html`
+  <div>
+    <p>Looks like you have no empires here...</p>
+    <div>
+      How would you like to name your empire?
+      <input id="n" />
+    </div>
+    <hr />
+    <div style="width: 100%">
+      <button onclick="${createEmpire.name}()" style="width: 100%;">
+        Create Empire
+      </button>
+    </div>
+  </div>
+`
 
-const sprites = [
-  ...[...Array(20).keys()].map(k => ({
-    x: k * 41,
-    y: 80,
-    color: 'red',
-    width: 20,
-    height: 40,
-    dx: 2,
-  })),
-  ...[...Array(20).keys()].map(k => ({
-    x: k * 41,
-    y: 120,
-    color: 'blue',
-    width: 20,
-    height: 40,
-    dx: 4,
-  })),
-  ...[...Array(20).keys()].map(k => ({
-    x: k * 41,
-    y: 160,
-    color: 'green',
-    width: 20,
-    height: 40,
-    dx: 8,
-  })),
-].map(Sprite)
+const app = () => {
+  if (game == null) {
+    return login()
+  } else {
+    return game.render()
+  }
+}
 
-GameLoop({
-  update() {
-    sprites.forEach(s => {
-      if (s.x > canvas.width) {
-        s.x = -s.width
-      }
-      s.update()
-    })
-  },
-  render() {
-    sprites.forEach(s => s.render())
-  },
-}).start()
+render(app())

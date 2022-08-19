@@ -16,7 +16,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "kontra": "^8.0.0"
+    "slim-js": "^5.0.10"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
@@ -27,7 +27,10 @@
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-kontra": "^1.0.1",
     "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-minify-html-literals": "^1.2.6",
     "rollup-plugin-serve": "^2.0.1",
+    "rollup-plugin-string": "^3.0.0",
+    "rollup-plugin-uglify": "^6.0.4",
     "serve": "^14.0.1",
     "tslib": "^2.4.0",
     "typescript": "^4.7.4"
