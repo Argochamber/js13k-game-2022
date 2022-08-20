@@ -12,8 +12,8 @@ const DIST_FOLDER = './dist'
 const ROLLUP_WATCH = !!process.env.ROLLUP_WATCH
 const WATCH = ROLLUP_WATCH
   ? [
-      serve({ contentBase: DIST_FOLDER, port: 8080 }),
       livereload({ watch: DIST_FOLDER }),
+      serve({ contentBase: DIST_FOLDER, port: 8080 }),
     ]
   : [
       uglify({
