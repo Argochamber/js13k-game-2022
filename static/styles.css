@@ -23,3 +23,14 @@ button.btn-disabled {
   background-color: gray;
   border-style: inset;
 }
+button.island {
+  width: 100%;
+  text-align: left;
+  font-size: 100%;
+  color: white;
+  background: none;
+  border: none;
+}
+button.island:hover {
+  color: red;
+}

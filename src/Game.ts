@@ -1,9 +1,10 @@
-import { globalTabs, Tab as GlobalTab } from './fragments/globalTabs'
-import { islandsTab, Tab as IslandsTab, TABS } from './fragments/islandTabs'
+import { globalTabs, Tab as GlobalTab, TABS as GLOBAL_TABS } from './fragments/globalTabs'
+import { islandsTab, Tab as IslandsTab, TABS as ISLAND_TABS } from './fragments/islandTabs'
 import { Island } from './Island'
 import { html, store } from './lib'
 import { render } from './ui'
 import { dashboard } from './views/dashboard'
+import { islands } from './views/islands'
 
 export type Tab = GlobalTab | IslandsTab
 
@@ -18,10 +19,21 @@ export class Game {
     store.set('empire.name', name)
     const game = new Game()
     game.souls = 1000
-    game.tab = TABS[0]
+    game.tab = ISLAND_TABS[0]
     const free = Island.getFree()
+    free.owner = name
+    free.name = 'Island'
     game.selected[0] = free.x
     game.selected[1] = free.y
+
+    store.set('game.islands', { [`${free.x}:${free.y}`]: free}) // TODO: register islands when created
+
+    // DEBUG: adding a new one for testing purposes
+    const another = Island.getFree()
+    another.owner = name
+    another.name = 'The cooler island'
+
+    store.set('game.islands', { [`${free.x}:${free.y}`]: free, [`${another.x}:${another.y}`]: another }) // TODO: register islands when created
     ;(window as any).game = game
     return game
   }
@@ -30,7 +42,7 @@ export class Game {
     return store.get<string>('empire.name') ?? ''
   }
   get tab(): Tab {
-    return store.get<Tab>('game.tab') ?? TABS[0]
+    return store.get<Tab>('game.tab') ?? ISLAND_TABS[0]
   }
   set tab(id: Tab) {
     store.set('game.tab', id)
@@ -87,8 +99,10 @@ export class Game {
   // Internal use, the tab content fragment.
   private renderTabContent(): string {
     switch (this.tab) {
-      case TABS[0]:
+      case ISLAND_TABS[0]:
         return dashboard(this)
+      case GLOBAL_TABS[0]:
+        return islands(this)
       default:
         return ''
     }

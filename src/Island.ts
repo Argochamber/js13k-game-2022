@@ -33,6 +33,11 @@ export class Island {
     }
   }
 
+  static getIslands(owner: String): Array<Island> {
+    const islands = store.get<Record<string, Island>>('game.islands')
+    return islands ? Object.values(islands).filter(island => { return island.owner === owner }) : []
+  }
+
   constructor(readonly x: number, readonly y: number) {}
   name = 'Island'
   owner: string | null = null
