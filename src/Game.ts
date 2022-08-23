@@ -91,9 +91,22 @@ export class Game {
     `
   }
 
+  /**
+   * Changes the current viewed tab.
+   * @param tab 
+   */
   goToTab(tab: Tab) {
     this.tab = tab
     render(this.render())
+  }
+
+  /**
+   * Selects the given island and changes to the island overview tab.
+   */
+  selectIsland(x: number, y: number) {
+    this.selected[0] = x
+    this.selected[1] = y
+    this.goToTab('island')
   }
 
   // Internal use, the tab content fragment.
