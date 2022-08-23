@@ -2,6 +2,7 @@ import { Tab as GlobalTab } from './fragments/GlobalTabs'
 import { Tab as IslandsTab, TABS } from './fragments/IslandTabs'
 import { Island } from './Island'
 import { store } from './lib'
+import { update } from './ui'
 
 export type Tab = GlobalTab | IslandsTab
 
@@ -32,12 +33,14 @@ export class Game {
   }
   set tab(id: Tab) {
     store.set('game.tab', id)
+    update()
   }
   get souls() {
     return store.get<number>('empire.souls') ?? 0
   }
   set souls(souls: number) {
     store.set('empire.souls', souls)
+    update()
   }
 
   /**

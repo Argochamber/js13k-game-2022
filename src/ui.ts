@@ -24,7 +24,8 @@ export const h = <T extends Record<string, any>, U extends any[]>(
     o.setAttribute(k, v)
   }
   for (const child of children) {
-    o.append(child)
+    if (child instanceof Array) o.append(...child)
+    else o.append(child)
   }
   return o
 }

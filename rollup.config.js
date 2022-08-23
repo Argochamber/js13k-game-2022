@@ -27,6 +27,7 @@ export default {
   input: './src/index.tsx',
   output: {
     dir: DIST_FOLDER,
+    sourcemap: true,
   },
   watch: {
     include: 'src/**',
@@ -39,7 +40,7 @@ export default {
     ts(),
     babel({
       comments: ROLLUP_WATCH,
-      babelHelpers: 'bundled'
+      babelHelpers: 'bundled',
     }),
     copy({
       targets: [{ src: 'static/**/*', dest: 'dist' }],

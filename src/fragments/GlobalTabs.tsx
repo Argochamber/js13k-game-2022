@@ -4,7 +4,7 @@ export const TABS = ['islands', 'incursions', 'research'] as const
 
 export type Tab = typeof TABS[number]
 
-export const globalTabs = (tab: Tab | string) => (
+export const GlobalTabs = (tab: Tab | string) => (
   <div
     style={{
       borderBottom: '1px solid gray',

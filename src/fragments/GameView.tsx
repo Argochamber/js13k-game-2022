@@ -1,5 +1,6 @@
 import { Game } from '../Game'
 import { h } from '../ui'
+import { IslandsTab } from './IslandTabs'
 
 type Props = { game: Game }
 
@@ -19,7 +20,7 @@ export const GameView = ({ game }: Props) => (
         marginLeft: '1rem',
       }}
     >
-      islandsTab(this.tab)
+      <IslandsTab game={game} tab={game.tab} />
       {game.souls}
     </div>
     <div style={{ flex: 1 }}>this.renderTabContent()</div>

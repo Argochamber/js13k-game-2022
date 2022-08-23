@@ -19,7 +19,8 @@
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
     "jsx": "react",
-    "jsxFactory": "h"
+    "jsxFactory": "h",
+    "sourceMap": true
   },
   "exclude": ["node_modules"],
   "include": ["src/**/*.ts", "src/**/*.tsx"]
