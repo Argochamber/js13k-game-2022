@@ -1,7 +1,9 @@
 import { Game } from '../Game'
 import { h } from '../ui'
 
-export const GameView = ({ game }: { game: Game }) => (
+type Props = { game: Game }
+
+export const GameView = ({ game }: Props) => (
   <div
     style={{
       display: 'flex',
