@@ -20,20 +20,20 @@ export class Game {
     const game = new Game()
     game.souls = 1000
     game.tab = ISLAND_TABS[0]
+
+    // DEBUG: adding islands for testing purposes
     const free = Island.getFree()
     free.owner = name
     free.name = 'Island'
     game.selected[0] = free.x
     game.selected[1] = free.y
+    Island.store(free) // TODO: decide whether this is called separatedly or when a new island is generated
 
-    store.set('game.islands', { [`${free.x}:${free.y}`]: free}) // TODO: register islands when created
-
-    // DEBUG: adding a new one for testing purposes
     const another = Island.getFree()
     another.owner = name
     another.name = 'The cooler island'
+    Island.store(another)
 
-    store.set('game.islands', { [`${free.x}:${free.y}`]: free, [`${another.x}:${another.y}`]: another }) // TODO: register islands when created
     ;(window as any).game = game
     return game
   }
