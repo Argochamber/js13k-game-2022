@@ -1,9 +1,7 @@
-import { globalTabs, Tab as GlobalTab } from './fragments/globalTabs'
-import { islandsTab, Tab as IslandsTab, TABS } from './fragments/islandTabs'
+import { Tab as GlobalTab } from './fragments/GlobalTabs'
+import { Tab as IslandsTab, TABS } from './fragments/IslandTabs'
 import { Island } from './Island'
-import { html, store } from './lib'
-import { render } from './ui'
-import { dashboard } from './views/dashboard'
+import { store } from './lib'
 
 export type Tab = GlobalTab | IslandsTab
 
@@ -40,58 +38,6 @@ export class Game {
   }
   set souls(souls: number) {
     store.set('empire.souls', souls)
-  }
-
-  /**
-   * Renders the whole game fragment.
-   */
-  render(): string {
-    return html`
-      <div
-        style="${`
-          display: flex;
-          width: calc(100% - 1rem);
-          height: calc(100% - 1rem);
-        `}"
-      >
-        <div
-          style="${`
-            border-right: 1px solid gray;
-            padding-right: 1rem;
-            margin-right: 1rem;
-            margin-left: 1rem;
-          `}"
-        >
-          ${islandsTab(this.tab)}
-        </div>
-        <div style="flex: 1">${this.renderTabContent()}</div>
-        <div
-          style="${`
-        border-left: 1px solid gray;
-            padding-left: 1rem;
-            margin-left: 1rem;
-            margin-right: 1rem;
-            `}"
-        >
-          ${globalTabs(this.tab)}
-        </div>
-      </div>
-    `
-  }
-
-  goToTab(tab: Tab) {
-    this.tab = tab
-    render(this.render())
-  }
-
-  // Internal use, the tab content fragment.
-  private renderTabContent(): string {
-    switch (this.tab) {
-      case TABS[0]:
-        return dashboard(this)
-      default:
-        return ''
-    }
   }
 
   /**

@@ -24,7 +24,7 @@ const WATCH = ROLLUP_WATCH
     ]
 
 export default {
-  input: './src/index.ts',
+  input: './src/index.tsx',
   output: {
     dir: DIST_FOLDER,
   },
@@ -36,10 +36,11 @@ export default {
     string({
       include: '**/*.txt',
     }),
+    ts(),
     babel({
       comments: ROLLUP_WATCH,
+      babelHelpers: 'bundled'
     }),
-    ts(),
     copy({
       targets: [{ src: 'static/**/*', dest: 'dist' }],
     }),

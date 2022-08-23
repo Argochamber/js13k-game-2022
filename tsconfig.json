@@ -17,8 +17,10 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "strictBindCallApply": true,
-    "strictFunctionTypes": true
+    "strictFunctionTypes": true,
+    "jsx": "react",
+    "jsxFactory": "h"
   },
   "exclude": ["node_modules"],
-  "include": ["src/**/*.ts", "src/index.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
