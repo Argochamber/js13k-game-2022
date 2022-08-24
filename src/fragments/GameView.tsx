@@ -1,15 +1,24 @@
 import { Game } from '../Game'
 import { h } from '../ui'
+import { Buildings } from '../views/Buildings'
 import { Dashboard } from '../views/Dashboard'
 import { GlobalTabs } from './GlobalTabs'
 import { IslandsTab } from './IslandTabs'
 
 type Props = { game: Game }
 
+const ROUTES = {
+  island: Dashboard,
+  islands: null,
+  incursions: null,
+  buildings: Buildings,
+  research: null,
+}
+
 const TabRoutes = ({ game }: Props) => {
-  switch (game.tab) {
-    case 'island':
-      return <Dashboard game={game} />
+  const C = ROUTES[game.tab]
+  if (C != null) {
+    return <C game={game} />
   }
   return null
 }
