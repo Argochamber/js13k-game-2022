@@ -34,7 +34,6 @@ export const GameView = ({ game }: Props) => (
       }}
     >
       <IslandsTab game={game} />
-      {game.souls}
     </div>
     <div style={{ flex: 1 }}>
       <TabRoutes game={game} />
