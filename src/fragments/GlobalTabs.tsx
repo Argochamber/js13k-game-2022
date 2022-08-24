@@ -1,10 +1,13 @@
+import { Game } from '../Game'
 import { h } from '../ui'
 
 export const TABS = ['islands', 'incursions', 'research'] as const
 
 export type Tab = typeof TABS[number]
 
-export const GlobalTabs = (tab: Tab | string) => (
+type Props = { game: Game }
+
+export const GlobalTabs = ({ game }: Props) => (
   <div
     style={{
       borderBottom: '1px solid gray',
@@ -18,18 +21,17 @@ export const GlobalTabs = (tab: Tab | string) => (
         flexDirection: 'column',
       }}
     >
-      $
       {TABS.map(_ => {
-        const active = _ === tab
+        const active = _ === game.tab
         return (
           <button
-            onClick={active ? () => {} : () => {}}
+            onClick={active ? () => {} : () => (game.tab = _)}
             className={active ? 'btn-disabled' : ''}
           >
             {_}
           </button>
         )
-      }).join('')}
+      })}
     </div>
   </div>
 )

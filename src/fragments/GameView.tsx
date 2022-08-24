@@ -1,9 +1,22 @@
 import { Game } from '../Game'
 import { h } from '../ui'
+import { Dashboard } from '../views/Dashboard'
+import { GlobalTabs } from './GlobalTabs'
 import { IslandsTab } from './IslandTabs'
 
 type Props = { game: Game }
 
+const TabRoutes = ({ game }: Props) => {
+  switch (game.tab) {
+    case 'island':
+      return <Dashboard game={game} />
+  }
+  return null
+}
+
+/**
+ * The central game's view (With tabs).
+ */
 export const GameView = ({ game }: Props) => (
   <div
     style={{
@@ -20,10 +33,12 @@ export const GameView = ({ game }: Props) => (
         marginLeft: '1rem',
       }}
     >
-      <IslandsTab game={game} tab={game.tab} />
+      <IslandsTab game={game} />
       {game.souls}
     </div>
-    <div style={{ flex: 1 }}>this.renderTabContent()</div>
+    <div style={{ flex: 1 }}>
+      <TabRoutes game={game} />
+    </div>
     <div
       style={{
         borderLeft: '1px solid gray',
@@ -32,7 +47,7 @@ export const GameView = ({ game }: Props) => (
         marginRight: '1rem',
       }}
     >
-      globalTabs(this.tab)
+      <GlobalTabs game={game} />
     </div>
   </div>
 )

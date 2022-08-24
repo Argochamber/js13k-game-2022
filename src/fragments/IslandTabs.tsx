@@ -5,9 +5,9 @@ export const TABS = ['island', 'buildings'] as const
 
 export type Tab = typeof TABS[number]
 
-type Props = { tab: Tab | string; game: Game }
+type Props = { game: Game }
 
-export const IslandsTab = ({ game, tab }: Props) => (
+export const IslandsTab = ({ game }: Props) => (
   <div
     style={{
       borderBottom: '1px solid gray',
@@ -22,16 +22,10 @@ export const IslandsTab = ({ game, tab }: Props) => (
       }}
     >
       {TABS.map(_ => {
-        const active = _ === tab
+        const active = _ === game.tab
         return (
           <button
-            onClick={
-              active
-                ? () => {}
-                : () => {
-                    game.tab = tab as Tab
-                  }
-            }
+            onClick={active ? () => {} : () => (game.tab = _ as Tab)}
             className={active ? 'btn-disabled' : ''}
           >
             {_}

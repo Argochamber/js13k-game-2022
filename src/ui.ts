@@ -24,13 +24,14 @@ export const h = <T extends Record<string, any>, U extends any[]>(
     o.setAttribute(k, v)
   }
   for (const child of children) {
+    if (child == null) continue
     if (child instanceof Array) o.append(...child)
     else o.append(child)
   }
   return o
 }
 
-export type Component<T> = (props: T) => JSX.Element | string | null;
+export type Component<T> = (props: T) => JSX.Element | string | null
 
 let target: Component<void> = () => null
 
