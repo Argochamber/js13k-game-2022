@@ -1,5 +1,5 @@
 import { Game } from '../Game'
-import { h } from '../ui'
+import { h, state } from '../ui'
 
 type Props = { game: Game }
 
