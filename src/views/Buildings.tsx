@@ -1,5 +1,5 @@
 import { Game } from '../Game'
-import { sprite, SpriteBuilder } from '../sprites'
+import { colored, noised, sprite } from '../sprites'
 import { h, state } from '../ui'
 
 type Props = { game: Game }
@@ -15,15 +15,35 @@ export const BUILDINGS = [
 const st = state<string | null>(null)
 
 sprite(async (builder, ctx) => {
-  builder.size(256, 256)
-  const image = await builder.image('sprites.png')
+  const spr = await colored('sprites.png', {
+    base: [
+      [230, 201, 195, 255],
+      [255, 255, 255, 255],
+      [88, 77, 238, 120],
+      [245, 213, 206, 255],
+    ],
+    accent: [
+      [245, 213, 206, 255],
+      [88, 77, 238, 120],
+      [88, 77, 75, 255],
+    ],
+    glint: [[225, 225, 255, 255]],
+  })
+  const image = await builder.image(spr)
+  const noise = await sprite(async (b, c) => {
+    b.size(256, 128)
+    c.imageSmoothingEnabled = false
+    c.drawImage(image, 16, 16, 32, 32, 0, 0, 64, 64)
+    const n = await noised(b.url, 0.15)
+    return builder.image(n)
+  })
+  const origi = await builder.image('sprites.png')
+  builder.size(256, 128 * 3)
+  ctx.getImageData(0, 0, 128 * 2, 128 * 3)
   ctx.imageSmoothingEnabled = false
-  ctx.drawImage(image, 0, 0, 256, 256)
-  ctx.globalCompositeOperation = 'multiply'
-  ctx.fillStyle = 'red'
-  ctx.fillRect(0, 0, builder.width, builder.height)
-  ctx.globalCompositeOperation = 'destination-in'
-  ctx.drawImage(image, 0, 0, 256, 256)
+  ctx.drawImage(image, 0, 0_0, 256, 128)
+  ctx.drawImage(origi, 0, 128, 256, 128)
+  ctx.drawImage(noise, 0, 256, 256, 128)
   st.value = builder.url
 })
 
