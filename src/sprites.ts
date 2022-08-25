@@ -71,9 +71,9 @@ export const sprite = async <T = void>(
   return await block(builder, builder.context)
 }
 
-// type Vec2 = [number, number]
+type Vec2 = [number, number]
 type Vec4 = [number, number, number, number]
-type Pal = {
+type Palette = {
   base: [Vec4, Vec4, Vec4, Vec4]
   accent: [Vec4, Vec4, Vec4]
   glint: [Vec4]
@@ -92,45 +92,124 @@ const palette = {
 
 export const rgb2hex = (...c: number[]) =>
   c.map(_ => _.toString(16).padStart(2, '0')).join('')
-
-export const colored = (src: string, target: Pal) =>
-  sprite(async (b, c) => {
-    const image = await loadImage(src)
-    const w = image.naturalWidth
-    const h = image.naturalHeight
-    b.size(w, h)
-    c.drawImage(image, 0, 0)
-    const info = c.getImageData(0, 0, w, h)
-    for (let i = 0; i < info.data.length; i += 4) {
-      const r = info.data[i]!
-      const g = info.data[i + 1]!
-      const b = info.data[i + 2]!
-      const color = palette[`${rgb2hex(r, g, b)}`]
-      if (color != null) {
-        const c = target[color[0]][color[1]]!
-        info.data[i] = c[0]
-        info.data[i + 1] = c[1]
-        info.data[i + 2] = c[2]
-        info.data[i + 3] = c[3]
+export class Sprite {
+  constructor(readonly data: string) {}
+  image() {
+    return loadImage(this.data)
+  }
+  async noised(amount: number) {
+    return sprite(async (b, c) => {
+      await b.print(this.data)
+      c.globalCompositeOperation = 'multiply'
+      const info = b.info
+      for (let i = 0; i < info.data.length; i += 4) {
+        const r = 1 - Math.random() * amount
+        const g = 1 - Math.random() * amount
+        const b = 1 - Math.random() * amount
+        info.data[i] *= r
+        info.data[i + 1] *= g
+        info.data[i + 2] *= b
       }
-    }
-    c.putImageData(info, 0, 0)
-    return b.url
-  })
+      c.putImageData(info, 0, 0)
+      return new Sprite(b.url)
+    })
+  }
+  async scaled(...scale: Vec2) {
+    const img = await this.image()
+    return sprite(async (b, c) => {
+      const w = img.naturalWidth * scale[0]
+      const h = img.naturalHeight * scale[1]
+      b.size(w, h)
+      c.imageSmoothingEnabled = false
+      c.drawImage(img, 0, 0, w, h)
+      return new Sprite(b.url)
+    })
+  }
+  async colored(target: Palette) {
+    return sprite(async (b, c) => {
+      const image = await loadImage(this.data)
+      const w = image.naturalWidth
+      const h = image.naturalHeight
+      b.size(w, h)
+      c.drawImage(image, 0, 0)
+      const info = c.getImageData(0, 0, w, h)
+      for (let i = 0; i < info.data.length; i += 4) {
+        const r = info.data[i]!
+        const g = info.data[i + 1]!
+        const b = info.data[i + 2]!
+        const color = palette[`${rgb2hex(r, g, b)}`]
+        if (color != null) {
+          const c = target[color[0]][color[1]]!
+          info.data[i] = c[0]
+          info.data[i + 1] = c[1]
+          info.data[i + 2] = c[2]
+          info.data[i + 3] = c[3]
+        }
+      }
+      c.putImageData(info, 0, 0)
+      return new Sprite(b.url)
+    })
+  }
+}
 
-export const noised = (spr: string, amount: number) =>
-  sprite(async (b, c) => {
-    await b.print(spr)
-    c.globalCompositeOperation = 'multiply'
-    const info = b.info
-    for (let i = 0; i < info.data.length; i += 4) {
-      const r = 1 - Math.random() * amount
-      const g = 1 - Math.random() * amount
-      const b = 1 - Math.random() * amount
-      info.data[i] *= r
-      info.data[i + 1] *= g
-      info.data[i + 2] *= b
+export class Atlas {
+  constructor(readonly tileSize: Vec2, readonly tiles: Sprite[][]) {}
+  at(x: number, y: number): Sprite {
+    return this.tiles[x]?.[y]!
+  }
+  static async from(image: string, tileSize: Vec2) {
+    const sheet = await loadImage(image)
+    const tiles: Sprite[][] = []
+    const count = {
+      x: sheet.naturalWidth / tileSize[0],
+      y: sheet.naturalHeight / tileSize[1],
     }
-    c.putImageData(info, 0, 0)
-    return b.url
-  })
+    for (let i = 0; i < count.x; i++) {
+      const row: Sprite[] = []
+      for (let j = 0; j < count.y; j++) {
+        const spr = await sprite(async (b, c) => {
+          b.size(...tileSize)
+          c.drawImage(
+            sheet,
+            i * tileSize[0],
+            j * tileSize[1],
+            tileSize[0],
+            tileSize[1],
+            0,
+            0,
+            tileSize[0],
+            tileSize[1]
+          )
+          return new Sprite(b.url)
+        })
+        row.push(spr)
+      }
+      tiles.push(row)
+    }
+    return new Atlas(tileSize, tiles)
+  }
+  async noised(amount: number) {
+    return new Atlas(
+      this.tileSize,
+      await Promise.all(
+        this.tiles.map(spr => Promise.all(spr.map(spr => spr.noised(amount))))
+      )
+    )
+  }
+  async scaled(...scale: Vec2) {
+    return new Atlas(
+      [this.tileSize[0] * scale[0], this.tileSize[1] * scale[1]],
+      await Promise.all(
+        this.tiles.map(spr => Promise.all(spr.map(spr => spr.scaled(...scale))))
+      )
+    )
+  }
+  async colored(palette: Palette) {
+    return new Atlas(
+      this.tileSize,
+      await Promise.all(
+        this.tiles.map(spr => Promise.all(spr.map(spr => spr.colored(palette))))
+      )
+    )
+  }
+}
