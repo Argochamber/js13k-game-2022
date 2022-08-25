@@ -5,13 +5,17 @@ import { h } from '../ui'
 type Props = { island: Island, game: Game }
 
 export const IslandListItem = ({ island, game }: Props) => (
-  <button className={'island'} onClick={() => { game.selectIsland(island.x, island.y) }}>
-    <div
-      style={{
-        color: 'gray'
-      }}
-    >Soul gate level: ${island.soulGate}</div>
-    <hr/>
-    <img src={'https://64.media.tumblr.com/12aec2f22e15922736a3f0b7f9ed6987/tumblr_oeyhctM7Kn1utamaho1_540.png'}/>
-  </button>
+  <div>
+    <button className={'island'} onClick={() => { game.selectIsland(island.x, island.y) }}>
+      {'>' + island.name}
+      <div
+        style={{
+          color: 'gray'
+        }}
+      >Soul gate level: {island.soulGate}</div>
+      <hr/>
+      <img src={'https://64.media.tumblr.com/12aec2f22e15922736a3f0b7f9ed6987/tumblr_oeyhctM7Kn1utamaho1_540.png'}/>
+    </button>
+    <p/>
+  </div>
 )

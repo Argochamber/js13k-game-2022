@@ -18,8 +18,9 @@ export class Game {
     const game = new Game()
     game.souls = 1000
     game.tab = TABS[0]
-    
+
     const free = Island.getFree()
+    free.owner = name
     game.selected[0] = free.x
     game.selected[1] = free.y
     Island.store(free) // TODO: decide whether this is called separatedly or when a new island is generated

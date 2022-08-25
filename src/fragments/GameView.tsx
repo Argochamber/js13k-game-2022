@@ -2,6 +2,7 @@ import { Game } from '../Game'
 import { h } from '../ui'
 import { Buildings } from '../views/Buildings'
 import { Dashboard } from '../views/Dashboard'
+import { Islands } from '../views/Islands'
 import { GlobalTabs } from './GlobalTabs'
 import { IslandsTab } from './IslandTabs'
 
@@ -9,7 +10,7 @@ type Props = { game: Game }
 
 const ROUTES = {
   island: Dashboard,
-  islands: null,
+  islands: Islands,
   incursions: null,
   buildings: Buildings,
   research: null,
