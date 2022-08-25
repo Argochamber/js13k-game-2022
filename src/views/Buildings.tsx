@@ -1,7 +1,5 @@
 import { Game } from '../Game'
-import { rint } from '../lib'
-import { simplex } from '../noise'
-import { SpriteBuilder } from '../sprites'
+import { sprite, SpriteBuilder } from '../sprites'
 import { h, state } from '../ui'
 
 type Props = { game: Game }
@@ -16,21 +14,18 @@ export const BUILDINGS = [
 
 const st = state<string | null>(null)
 
-SpriteBuilder.load([256, 256], 'sprites.png')
-  .then(builder =>
-    builder.build(async ctx => {
-      ctx.imageSmoothingEnabled = false
-      ctx.drawImage(builder.images[0]!, 0, 0, 256, 256)
-      ctx.globalCompositeOperation = 'multiply'
-      ctx.fillStyle = 'red'
-      ctx.fillRect(0, 0, builder.size[0], builder.size[1])
-      ctx.globalCompositeOperation = 'destination-in'
-      ctx.drawImage(builder.images[0]!, 0, 0, 256, 256)
-    })
-  )
-  .then(builder => {
-    st.value = builder.toDataURL()
-  })
+sprite(async (builder, ctx) => {
+  builder.size(256, 256)
+  const image = await builder.image('sprites.png')
+  ctx.imageSmoothingEnabled = false
+  ctx.drawImage(image, 0, 0, 256, 256)
+  ctx.globalCompositeOperation = 'multiply'
+  ctx.fillStyle = 'red'
+  ctx.fillRect(0, 0, builder.width, builder.height)
+  ctx.globalCompositeOperation = 'destination-in'
+  ctx.drawImage(image, 0, 0, 256, 256)
+  st.value = builder.url
+})
 
 export const Buildings = ({}: Props) => (
   <div>

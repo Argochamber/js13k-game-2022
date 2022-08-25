@@ -6,59 +6,58 @@
  * Procedural sprite builder, generates images.
  */
 export class SpriteBuilder {
-  /**
-   * Creates a new builder by loading required resources first.
-   * @param images
-   * @returns
-   */
-  static load(size: [number, number], ...images: string[]) {
-    return Promise.all(
-      images.map(
-        src =>
-          new Promise<HTMLImageElement>(r => {
-            const node = new Image()
-            node.onload = () => r(node)
-            node.src = src
-          })
-      )
-    ).then(data => new SpriteBuilder(size, data))
-  }
+  constructor(readonly canvas: HTMLCanvasElement) {}
 
-  constructor(
-    readonly size: [number, number],
-    readonly images: HTMLImageElement[]
-  ) {}
+  /**
+   * Sets canvas size.
+   */
+  size(width: number, height: number) {
+    this.canvas.width = width
+    this.canvas.height = height
+  }
 
   /**
    * Adds a new image to the sprite builder, if needed.
    * @param src The source.
    * @returns
    */
-  async loadImage(src: string) {
+  async image(src: string) {
     const node = new Image()
     const loaded = new Promise(r => {
       node.onload = r
     })
     node.src = src
     await loaded
-    this.images.push(node)
-    return this
+    return node
   }
 
-  /**
-   * Runs a block function with the context, so the user can build images.
-   * @param block
-   * @returns
-   */
-  async build(block: (context: CanvasRenderingContext2D) => Promise<void>) {
-    const canvas = document.createElement('canvas')
-    canvas.width = this.size[0]
-    canvas.height = this.size[1]
-    const ctx = canvas.getContext('2d')
-    if (ctx == null) {
-      throw new Error(`Could not get the context.`)
-    }
-    await block(ctx)
-    return canvas
+  get url() {
+    return this.canvas.toDataURL()
   }
+  get width() {
+    return this.canvas.width
+  }
+  get height() {
+    return this.canvas.height
+  }
+}
+
+/**
+ * Runs a block function with the context, so the user can build images.
+ * @param block
+ * @returns
+ */
+export const sprite = async <T = void>(
+  block: (
+    builder: SpriteBuilder,
+    context: CanvasRenderingContext2D
+  ) => Promise<T>
+) => {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  if (ctx == null) {
+    throw new Error(`Could not get the context.`)
+  }
+  const builder = new SpriteBuilder(canvas)
+  return await block(builder, ctx)
 }
