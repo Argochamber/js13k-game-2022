@@ -3,6 +3,19 @@
 */
 
 /**
+ * Creates the image so it can be loaded.
+ */
+export const loadImage = async (src: string) => {
+  const node = new Image()
+  const loaded = new Promise(r => {
+    node.onload = r
+  })
+  node.src = src
+  await loaded
+  return node
+}
+
+/**
  * Procedural sprite builder, generates images.
  */
 export class SpriteBuilder {
@@ -19,21 +32,8 @@ export class SpriteBuilder {
     this.canvas.height = height
   }
 
-  /**
-   * Creates the image so it can be loaded.
-   */
-  async image(src: string) {
-    const node = new Image()
-    const loaded = new Promise(r => {
-      node.onload = r
-    })
-    node.src = src
-    await loaded
-    return node
-  }
-
   async print(src: string) {
-    const image = await this.image(src)
+    const image = await loadImage(src)
     const w = image.naturalWidth
     const h = image.naturalHeight
     this.size(w, h)
@@ -95,7 +95,7 @@ export const rgb2hex = (...c: number[]) =>
 
 export const colored = (src: string, target: Pal) =>
   sprite(async (b, c) => {
-    const image = await b.image(src)
+    const image = await loadImage(src)
     const w = image.naturalWidth
     const h = image.naturalHeight
     b.size(w, h)
