@@ -1,5 +1,5 @@
 import { Game } from '../Game'
-import { Atlas, sprite } from '../sprites'
+import { Atlas, Sprite } from '../sprites'
 import { h, state } from '../ui'
 
 type Props = { game: Game }
@@ -14,7 +14,7 @@ export const BUILDINGS = [
 
 const st = state<string | null>(null)
 
-sprite(async (builder, ctx) => {
+Sprite.compose(async ctx => {
   const atlas = await Atlas.from('sprites.png', [16, 16])
     .then(s =>
       s.colored({
@@ -37,8 +37,7 @@ sprite(async (builder, ctx) => {
   ctx.drawImage(await atlas.at(2, 0).image(), 64, 64)
   ctx.drawImage(await atlas.at(0, 1).image(), 0, 0)
   ctx.drawImage(await atlas.at(1, 1).image(), 64, 0)
-  st.value = builder.url
-})
+}).then(s => (st.value = s.data))
 
 export const Buildings = ({}: Props) => (
   <div>
