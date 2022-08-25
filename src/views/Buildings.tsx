@@ -14,7 +14,7 @@ export const BUILDINGS = [
 
 const st = state<string | null>(null)
 
-Sprite.compose(async ctx => {
+Sprite.compose(256, 256, async ctx => {
   const atlas = await Atlas.from('sprites.png', [16, 16])
     .then(s =>
       s.colored({
@@ -34,9 +34,19 @@ Sprite.compose(async ctx => {
     )
     .then(s => s.scaled(4, 4))
     .then(s => s.noised(0.15))
-  ctx.drawImage(await atlas.at(2, 0).image(), 64, 64)
-  ctx.drawImage(await atlas.at(0, 1).image(), 0, 0)
-  ctx.drawImage(await atlas.at(1, 1).image(), 64, 0)
+
+  await atlas
+    .at(0, 1)
+    .rotated(-90)
+    .then(_ => _.draw(ctx, 64, 0))
+  await atlas
+    .at(0, 1)
+    .rotated(0)
+    .then(_ => _.draw(ctx, 0, 64))
+  await atlas
+    .at(1, 1)
+    .rotated(0)
+    .then(_ => _.draw(ctx, 64, 64))
 }).then(s => (st.value = s.data))
 
 export const Buildings = ({}: Props) => (

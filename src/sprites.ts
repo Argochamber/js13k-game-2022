@@ -15,46 +15,6 @@ export const loadImage = async (src: string) => {
   return node
 }
 
-/**
- * Procedural sprite builder, generates images.
- */
-export class SpriteBuilder {
-  readonly context: CanvasRenderingContext2D
-  constructor(readonly canvas: HTMLCanvasElement) {
-    this.context = canvas.getContext('2d')!
-  }
-
-  /**
-   * Sets canvas size.
-   */
-  size(width: number, height: number) {
-    this.canvas.width = width
-    this.canvas.height = height
-  }
-
-  async print(src: string) {
-    const image = await loadImage(src)
-    const w = image.naturalWidth
-    const h = image.naturalHeight
-    this.size(w, h)
-    this.context.drawImage(image, 0, 0)
-    return image
-  }
-
-  get info() {
-    return this.context.getImageData(0, 0, this.width, this.height)
-  }
-  get url() {
-    return this.canvas.toDataURL()
-  }
-  get width() {
-    return this.canvas.width
-  }
-  get height() {
-    return this.canvas.height
-  }
-}
-
 type Vec2 = [number, number]
 type Vec4 = [number, number, number, number]
 type Palette = {
@@ -79,25 +39,28 @@ export const rgb2hex = (...c: number[]) =>
 
 export class Sprite {
   static async compose(
-    block: (
-      ctx: CanvasRenderingContext2D,
-      builder: SpriteBuilder
-    ) => Promise<void>
+    width: number,
+    height: number,
+    block: (ctx: CanvasRenderingContext2D) => Promise<void>
   ) {
     const canvas = document.createElement('canvas')
-    const builder = new SpriteBuilder(canvas)
-    await block(builder.context, builder)
-    return new Sprite(builder.url)
+    canvas.width = width
+    canvas.height = height
+    await block(canvas.getContext('2d')!)
+    return new Sprite(canvas.toDataURL())
   }
   constructor(readonly data: string) {}
   image() {
     return loadImage(this.data)
   }
   async noised(amount: number) {
-    return Sprite.compose(async (c, b) => {
-      await b.print(this.data)
+    const image = await loadImage(this.data)
+    const w = image.naturalWidth
+    const h = image.naturalHeight
+    return Sprite.compose(w, h, async c => {
+      c.drawImage(image, 0, 0)
+      const info = c.getImageData(0, 0, w, h)
       c.globalCompositeOperation = 'multiply'
-      const info = b.info
       for (let i = 0; i < info.data.length; i += 4) {
         const r = 1 - Math.random() * amount
         const g = 1 - Math.random() * amount
@@ -111,20 +74,18 @@ export class Sprite {
   }
   async scaled(...scale: Vec2) {
     const img = await this.image()
-    return Sprite.compose(async (c, b) => {
-      const w = img.naturalWidth * scale[0]
-      const h = img.naturalHeight * scale[1]
-      b.size(w, h)
+    const w = img.naturalWidth * scale[0]
+    const h = img.naturalHeight * scale[1]
+    return Sprite.compose(w, h, async c => {
       c.imageSmoothingEnabled = false
       c.drawImage(img, 0, 0, w, h)
     })
   }
   async colored(target: Palette) {
-    return Sprite.compose(async (c, b) => {
-      const image = await loadImage(this.data)
-      const w = image.naturalWidth
-      const h = image.naturalHeight
-      b.size(w, h)
+    const image = await loadImage(this.data)
+    const w = image.naturalWidth
+    const h = image.naturalHeight
+    return Sprite.compose(w, h, async c => {
       c.drawImage(image, 0, 0)
       const info = c.getImageData(0, 0, w, h)
       for (let i = 0; i < info.data.length; i += 4) {
@@ -142,6 +103,20 @@ export class Sprite {
       }
       c.putImageData(info, 0, 0)
     })
+  }
+  async rotated(angle: number) {
+    const image = await loadImage(this.data)
+    const w = image.naturalWidth
+    const h = image.naturalHeight
+    return Sprite.compose(w, h, async c => {
+      c.imageSmoothingEnabled = false
+      c.translate(w / 2, h / 2)
+      c.rotate((angle * Math.PI) / 180)
+      c.drawImage(image, 0, 0, w, h, -w / 2, -h / 2, w, h)
+    })
+  }
+  async draw(ctx: CanvasRenderingContext2D, dx = 0, dy = 0) {
+    ctx.drawImage(await this.image(), dx, dy)
   }
 }
 
@@ -163,8 +138,7 @@ export class Atlas {
     for (let i = 0; i < count.x; i++) {
       const row: Sprite[] = []
       for (let j = 0; j < count.y; j++) {
-        const spr = await Sprite.compose(async (c, b) => {
-          b.size(...tileSize)
+        const spr = await Sprite.compose(tileSize[0], tileSize[1], async c => {
           c.drawImage(
             sheet,
             i * tileSize[0],
