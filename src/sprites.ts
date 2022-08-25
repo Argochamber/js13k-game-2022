@@ -145,6 +145,9 @@ export class Sprite {
   }
 }
 
+const rpm = (_: Sprite[][], f: (spr: Sprite) => Promise<Sprite>) =>
+  Promise.all(_.map(spr => Promise.all(spr.map(f))))
+
 export class Atlas {
   constructor(readonly tileSize: Vec2, readonly tiles: Sprite[][]) {}
   at(x: number, y: number): Sprite {
@@ -183,25 +186,19 @@ export class Atlas {
   async noised(amount: number) {
     return new Atlas(
       this.tileSize,
-      await Promise.all(
-        this.tiles.map(spr => Promise.all(spr.map(spr => spr.noised(amount))))
-      )
+      await rpm(this.tiles, spr => spr.noised(amount))
     )
   }
   async scaled(...scale: Vec2) {
     return new Atlas(
       [this.tileSize[0] * scale[0], this.tileSize[1] * scale[1]],
-      await Promise.all(
-        this.tiles.map(spr => Promise.all(spr.map(spr => spr.scaled(...scale))))
-      )
+      await rpm(this.tiles, spr => spr.scaled(...scale))
     )
   }
   async colored(palette: Palette) {
     return new Atlas(
       this.tileSize,
-      await Promise.all(
-        this.tiles.map(spr => Promise.all(spr.map(spr => spr.colored(palette))))
-      )
+      await rpm(this.tiles, spr => spr.colored(palette))
     )
   }
 }
