@@ -18,9 +18,17 @@ export class Game {
     const game = new Game()
     game.souls = 1000
     game.tab = TABS[0]
+    
     const free = Island.getFree()
     game.selected[0] = free.x
     game.selected[1] = free.y
+    Island.store(free) // TODO: decide whether this is called separatedly or when a new island is generated
+
+    const another = Island.getFree()
+    another.owner = name
+    another.name = 'The cooler island'
+    Island.store(another)
+
     ;(window as any).game = game
     return game
   }
@@ -51,5 +59,14 @@ export class Game {
       return new Game()
     }
     return null
+  }
+
+  /**
+   * Selects the given island and changes to the island overview tab.
+   */
+   selectIsland(x: number, y: number) {
+    this.selected[0] = x
+    this.selected[1] = y
+    this.tab = TABS[0]
   }
 }

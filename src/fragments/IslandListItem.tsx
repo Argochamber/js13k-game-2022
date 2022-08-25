@@ -5,7 +5,7 @@ import { h } from '../ui'
 type Props = { island: Island, game: Game }
 
 export const IslandListItem = ({ island, game }: Props) => (
-  <button>
+  <button className={'island'} onClick={() => { game.selectIsland(island.x, island.y) }}>
     <div
       style={{
         color: 'gray'
