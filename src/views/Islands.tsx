@@ -12,7 +12,7 @@ export const Islands = ({ game }: Props) => {
       {game.name} empire dominion <span style={{ color: 'gray' }}>{islands.length} islands</span>
       <hr/>
       <div>
-        {islands.map(island => { return IslandListItem({ game, island }) })}
+        {islands.map(island => <IslandListItem game={game} island={island} />)}
       </div>
     </div>
   )
