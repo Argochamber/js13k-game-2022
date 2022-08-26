@@ -9,6 +9,7 @@ const atlases = Object.entries({
   soul: 'JqJp/zPRev+P8KT/0//E/zPRev8z0Xr/M9F6/4/wpP8=',
   ice: 'HHHY/zWE5P+ZwfH//////5nB8f+ZwfH/mcHx/5nB8f8=',
   bone: '5N3U/7qyp/9hW1L/CQkJ/+Td1P8AAAD/urKn//////8=',
+  flesh: '9mFR/+0zO//gGyT/wBwo/6UdLf+lHS3/pR0t/+0zO/8=',
 }).reduce((o, [k, v]) => {
   o[k] = Atlas.from('sprites.png', [16, 16])
     .then(s => s.colored(v))
@@ -45,16 +46,53 @@ export const BUILDINGS = [
   const ice = await atlases.ice!
   const dark = await atlases.dark!
   const soul = await atlases.soul!
-  ;[
-    [0, 0],
-    [1, 2],
-    [2, 1],
-    [1, 0],
-  ].map((r, i) => {
-    Sprite.compose(64, 64, async ctx => {
-      await bone.at(...(r as [number, number])).draw(ctx, 0, 0)
-    }).then(s => (BUILDINGS[i]!.icon.value = s.data))
-  })
+  const flesh = await atlases.flesh!
+  // HEADQUARTERS LOGO
+  Sprite.compose(128, 128, async ctx => {
+    await dark
+      .at(1, 1)
+      .flipped()
+      .then(_ => _.rotated(90))
+      .then(_ => _.draw(ctx, 0, 0))
+    await dark
+      .at(1, 1)
+      .flipped()
+      .then(_ => _.draw(ctx, 0, 64))
+    await dark.at(1, 1).draw(ctx, 64, 64)
+    await dark
+      .at(1, 1)
+      .plug()
+      .then(_ => _.rotated(270))
+      .then(_ => _.draw(ctx, 64, 0))
+    await bone.at(0, 0).draw(ctx, 32, 32)
+  }).then(s => (BUILDINGS[0]!.icon.value = s.data))
+  // RESURRECTION ALTAR LOGO
+  Sprite.compose(128, 128, async ctx => {
+    await bone
+      .at(0, 2)
+      .flipped()
+      .then(_ => _.draw(ctx, 20, 64))
+    await bone.at(0, 2).draw(ctx, 44, 64)
+    ctx.globalCompositeOperation = 'source-atop'
+    await flesh.at(0, 1).draw(ctx, 32, 40)
+    ctx.globalCompositeOperation = 'screen'
+    await flesh
+      .at(1, 2)
+      .faded(0.3)
+      .then(_ => _.draw(ctx, 32, 0))
+    await flesh
+      .at(1, 2)
+      .faded(0.3)
+      .then(_ => _.draw(ctx, 36, 6))
+    await flesh
+      .at(1, 2)
+      .faded(0.3)
+      .then(_ => _.draw(ctx, 30, 4))
+    await flesh
+      .at(1, 2)
+      .faded(0.3)
+      .then(_ => _.draw(ctx, 28, 8))
+  }).then(s => (BUILDINGS[1]!.icon.value = s.data))
   // RITUAL MOUND LOGO
   Sprite.compose(128, 128, async ctx => {
     await dark

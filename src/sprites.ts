@@ -82,6 +82,9 @@ export class Sprite {
   image() {
     return loadImage(this.data)
   }
+  plug() {
+    return Promise.resolve(this)
+  }
   async noised(amount: number) {
     const image = await loadImage(this.data)
     const w = image.naturalWidth
