@@ -59,6 +59,7 @@ const palette = {
   '090909': 3,
   ff0000: 4,
   '01ff00': 5,
+  '00ff00': 5,
   '0000ff': 6,
   ffff00: 7,
 } as Record<string, number>

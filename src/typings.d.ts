@@ -3,4 +3,9 @@ declare module '*.txt' {
   export default data
 }
 
+declare module '*.spr' {
+  const sprite: () => Promise<string>
+  export default sprite
+}
+
 declare const DEVELOPMENT: boolean

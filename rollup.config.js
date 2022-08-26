@@ -30,6 +30,7 @@ function makeZip() {
     })
   }
   return {
+    name: 'zipper',
     closeBundle() {
       Promise.all([
         add('index.js'),
@@ -62,6 +63,19 @@ function makeZip() {
   }
 }
 
+/** @returns {import('rollup').Plugin} */
+function gourmad({} = {}) {
+  return {
+    name: 'Gourmad',
+    load(id) {
+      if (id.match(/\.spr$/)) {
+        return `export default async () => "foo"`
+      }
+      return null
+    },
+  }
+}
+
 function getPlugins() {
   const shared = [
     node_resolve(),
@@ -71,6 +85,7 @@ function getPlugins() {
     string({
       include: '**/*.txt',
     }),
+    gourmad(),
     ts(),
     babel({
       comments: DEVELOPMENT,
