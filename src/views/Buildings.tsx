@@ -1,7 +1,6 @@
 import { Game } from '../Game'
 import { Atlas, Sprite } from '../sprites'
 import { h, state } from '../ui'
-import spr from '../test.spr'
 
 type Props = { game: Game }
 
@@ -68,33 +67,32 @@ export const BUILDINGS = [
     await bone.at(0, 0).draw(ctx, 32, 32)
   }).then(s => (BUILDINGS[0]!.icon.value = s.data))
   // RESURRECTION ALTAR LOGO
-  spr({ bone, flesh }).then(s => (BUILDINGS[1]!.icon.value = s.data))
-  // Sprite.compose(128, 128, async ctx => {
-  //   await bone
-  //     .at(0, 2)
-  //     .flipped()
-  //     .then(_ => _.draw(ctx, 20, 64))
-  //   await bone.at(0, 2).draw(ctx, 44, 64)
-  //   ctx.globalCompositeOperation = 'source-atop'
-  //   await flesh.at(0, 1).draw(ctx, 32, 40)
-  //   ctx.globalCompositeOperation = 'screen'
-  //   await flesh
-  //     .at(1, 2)
-  //     .faded(0.3)
-  //     .then(_ => _.draw(ctx, 32, 0))
-  //   await flesh
-  //     .at(1, 2)
-  //     .faded(0.3)
-  //     .then(_ => _.draw(ctx, 36, 6))
-  //   await flesh
-  //     .at(1, 2)
-  //     .faded(0.3)
-  //     .then(_ => _.draw(ctx, 30, 4))
-  //   await flesh
-  //     .at(1, 2)
-  //     .faded(0.3)
-  //     .then(_ => _.draw(ctx, 28, 8))
-  // }).then(s => (BUILDINGS[1]!.icon.value = s.data))
+  Sprite.compose(128, 128, async ctx => {
+    await bone
+      .at(0, 2)
+      .flipped()
+      .then(_ => _.draw(ctx, 20, 64))
+    await bone.at(0, 2).draw(ctx, 44, 64)
+    ctx.globalCompositeOperation = 'source-atop'
+    await flesh.at(0, 1).draw(ctx, 32, 40)
+    ctx.globalCompositeOperation = 'screen'
+    await flesh
+      .at(1, 2)
+      .faded(0.3)
+      .then(_ => _.draw(ctx, 32, 0))
+    await flesh
+      .at(1, 2)
+      .faded(0.3)
+      .then(_ => _.draw(ctx, 36, 6))
+    await flesh
+      .at(1, 2)
+      .faded(0.3)
+      .then(_ => _.draw(ctx, 30, 4))
+    await flesh
+      .at(1, 2)
+      .faded(0.3)
+      .then(_ => _.draw(ctx, 28, 8))
+  }).then(s => (BUILDINGS[1]!.icon.value = s.data))
   // RITUAL MOUND LOGO
   Sprite.compose(128, 128, async ctx => {
     await dark

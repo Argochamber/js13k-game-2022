@@ -63,49 +63,6 @@ function makeZip() {
   }
 }
 
-/** @returns {import('rollup').Plugin} */
-function gourmad({} = {}) {
-  return {
-    name: 'Gourmad',
-    load(id) {
-      if (id.match(/\.spr$/)) {
-        const target = { w: 0, h: 0 }
-        const code = fs
-          .readFileSync(id)
-          .toString()
-          .split('\n')
-          .map(line => line.trim())
-          .filter(line => line.length)
-          .map(line => {
-            const [cmd, ...args] = line.match(/[^ ]+/g)
-            switch (cmd) {
-              case 'blend':
-                return `ctx.globalCompositeOperation = '${args[0]}';`
-              case 'get':
-                return `await Promise.resolve(palette.${args[0]}.at(${args[1]}, ${args[2]}))`
-              case 'fade':
-                return `  .then(_=>_.faded(${args[0]}))`
-              case 'draw':
-                return `  .then(_=>_.draw(ctx, ${args[0]}, ${args[1]}));`
-              case 'flip':
-                return `  .then(_=>_.flipped())`
-              case '//':
-                return line
-              case 'target':
-                return ''
-            }
-            throw new SyntaxError(`\nUnexpected token at line:\n${line}`)
-          })
-          .join('\n  ')
-        return `import { Sprite } from './sprites';
-export default palette => Sprite.compose(${target.w}, ${target.h}, async ctx => {  ${code}
-})`
-      }
-      return null
-    },
-  }
-}
-
 function getPlugins() {
   const shared = [
     node_resolve(),
@@ -115,7 +72,6 @@ function getPlugins() {
     string({
       include: '**/*.txt',
     }),
-    gourmad(),
     ts(),
     babel({
       comments: DEVELOPMENT,
