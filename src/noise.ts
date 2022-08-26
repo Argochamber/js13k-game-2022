@@ -10,19 +10,20 @@ class Grad {
   }
 }
 const grad3 = [
-  new Grad(1, 1, 0),
-  new Grad(-1, 1, 0),
-  new Grad(1, -1, 0),
-  new Grad(-1, -1, 0),
-  new Grad(1, 0, 1),
-  new Grad(-1, 0, 1),
-  new Grad(1, 0, -1),
-  new Grad(-1, 0, -1),
-  new Grad(0, 1, 1),
-  new Grad(0, -1, 1),
-  new Grad(0, 1, -1),
-  new Grad(0, -1, -1),
-]
+  [1, 1, 0],
+  [-1, 1, 0],
+  [1, -1, 0],
+  [-1, -1, 0],
+  [1, 0, 1],
+  [-1, 0, 1],
+  [1, 0, -1],
+  [-1, 0, -1],
+  [0, 1, 1],
+  [0, -1, 1],
+  [0, 1, -1],
+  [0, -1, -1],
+].map(_ => new Grad(...(_ as [number, number, number])))
+
 const p = [...atob(_p)].map(_ => _.charCodeAt(0))
 const perm = new Array(512)
 const gradP = new Array(512)

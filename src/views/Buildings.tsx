@@ -5,81 +5,67 @@ import { h, state } from '../ui'
 type Props = { game: Game }
 
 export const BUILDINGS = [
-  { id: 'headquarter', title: 'Head Quarters' },
-  { id: 'resurrect-altar', title: 'Resurrection Altar' },
-  { id: 'soul-gate', title: 'Soul Gate' },
-  { id: 'ritual-mound', title: 'Ritual Mound' },
-  { id: 'tartarus-gate', title: 'Tartarus Gate' },
+  {
+    id: 'headquarter',
+    title: 'Head Quarters',
+    icon: state<string | null>(null),
+  },
+  {
+    id: 'resurrect-altar',
+    title: 'Resurrection Altar',
+    icon: state<string | null>(null),
+  },
+  { id: 'soul-gate', title: 'Soul Gate', icon: state<string | null>(null) },
+  {
+    id: 'ritual-mound',
+    title: 'Ritual Mound',
+    icon: state<string | null>(null),
+  },
+  {
+    id: 'tartarus-gate',
+    title: 'Tartarus Gate',
+    icon: state<string | null>(null),
+  },
 ] as const
-
-const st = state<string | null>(null)
-
-Sprite.compose(256, 256, async ctx => {
+;(async () => {
   const atlas = await Atlas.from('sprites.png', [16, 16])
-    .then(s =>
-      s.colored({
-        base: [
-          [2, 201, 195, 255],
-          [255, 255, 255, 255],
-          [50, 0, 238, 255],
-          [245, 213, 206, 255],
-        ],
-        accent: [
-          [245, 213, 206, 255],
-          [88, 77, 238, 255],
-          [88, 77, 75, 255],
-        ],
-        glint: [[225, 225, 255, 255]],
-      })
-    )
+    .then(s => s.colored('5N3U/7qyp/9hW1L/CQkJ/+Td1P8AAAD/urKn//////8='))
     .then(s => s.scaled(4, 4))
     .then(s => s.noised(0.1))
-
-  await atlas
-    .at(0, 1)
-    .rotated(-90)
-    .then(_ => _.draw(ctx, 128, 64))
-  await atlas
-    .at(0, 1)
-    .rotated(0)
-    .then(_ => _.draw(ctx, 64, 128))
-  await atlas
-    .at(1, 1)
-    .rotated(0)
-    .then(_ => _.draw(ctx, 128, 128))
-  await atlas
-    .at(2, 0)
-    .rotated(0)
-    .then(_ => _.draw(ctx, 64, 64))
-  await atlas
-    .at(1, 1)
-    .rotated(90)
-    .then(_ => _.draw(ctx, 0, 128))
-  await atlas
-    .at(0, 1)
-    .rotated(90)
-    .then(_ => _.draw(ctx, 0, 64))
-  await atlas
-    .at(1, 1)
-    .rotated(180)
-    .then(_ => _.draw(ctx, 0, 0))
-  await atlas
-    .at(0, 1)
-    .rotated(180)
-    .then(_ => _.draw(ctx, 64, 0))
-  await atlas
-    .at(1, 1)
-    .rotated(-90)
-    .then(_ => _.draw(ctx, 128, 0))
-}).then(s => (st.value = s.data))
+  ;[
+    [0, 0],
+    [1, 2],
+    [2, 1],
+    [1, 0],
+    [2, 0],
+  ].map((r, i) => {
+    Sprite.compose(64, 64, async ctx => {
+      await atlas.at(...(r as [number, number])).draw(ctx, 0, 0)
+    }).then(s => (BUILDINGS[i]!.icon.value = s.data))
+  })
+})()
 
 export const Buildings = ({}: Props) => (
   <div>
-    <div>{st.value && <img src={st.value} />}</div>
     {BUILDINGS.map(building => (
-      <div>
-        <div>{building.title}</div>
-        <hr />
+      <div
+        style={{
+          display: 'flex',
+          borderBottom: '2px solid gray',
+          paddingBottom: '0.2rem',
+          marginBottom: '1rem',
+          paddingTop: '1rem',
+          alignItems: 'end',
+        }}
+      >
+        <img src={building.icon.value ?? ''} />
+        <div
+          style={{
+            marginLeft: '1rem',
+          }}
+        >
+          {building.title}
+        </div>
       </div>
     ))}
   </div>

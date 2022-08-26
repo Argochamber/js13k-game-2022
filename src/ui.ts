@@ -12,14 +12,16 @@ export const h = <T extends Record<string, any>, U extends any[]>(
       case 'className':
         o.className = v
         continue
-      case 'onClick':
-        o.onclick = v
-        continue
       case 'style':
         for (const key in v) {
           o.style[key as any] = v[key]
         }
         continue
+    }
+    if (k.match(/^on[A-Z]/)) {
+      const evt = k.replace(/^on(.+)/, (_, s) => `on${s.toLowerCase()}`)
+      o[evt as 'onclick'] = v
+      continue
     }
     o.setAttribute(k, v)
   }

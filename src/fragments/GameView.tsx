@@ -1,6 +1,7 @@
 import { Game } from '../Game'
 import { h } from '../ui'
 import { Buildings } from '../views/Buildings'
+import { ColorPicker } from '../views/ColorPicker'
 import { Dashboard } from '../views/Dashboard'
 import { Islands } from '../views/Islands'
 import { GlobalTabs } from './GlobalTabs'
@@ -17,6 +18,11 @@ const ROUTES = {
 }
 
 const TabRoutes = ({ game }: Props) => {
+  if (DEVELOPMENT) {
+    if ((game.tab as any) === 'colors.dev') {
+      return <ColorPicker />
+    }
+  }
   const C = ROUTES[game.tab]
   if (C != null) {
     return <C game={game} />
