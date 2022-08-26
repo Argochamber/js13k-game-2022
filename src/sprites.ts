@@ -143,6 +143,15 @@ export class Sprite {
       c.drawImage(image, 0, 0, w, h, -w / 2, -h / 2, w, h)
     })
   }
+  async flipped() {
+    const image = await loadImage(this.data)
+    const w = image.naturalWidth
+    const h = image.naturalHeight
+    return Sprite.compose(w, h, async c => {
+      c.scale(-1, 1)
+      c.drawImage(image, -w, 0, w, h)
+    })
+  }
   async draw(ctx: CanvasRenderingContext2D, dx = 0, dy = 0) {
     ctx.drawImage(await this.image(), dx, dy)
   }
