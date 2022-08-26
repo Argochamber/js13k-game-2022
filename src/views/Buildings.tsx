@@ -55,35 +55,70 @@ export const BUILDINGS = [
       await bone.at(...(r as [number, number])).draw(ctx, 0, 0)
     }).then(s => (BUILDINGS[i]!.icon.value = s.data))
   })
+  // RITUAL MOUND LOGO
   Sprite.compose(128, 128, async ctx => {
-    await soul.at(2, 0).draw(ctx, 16, 16)
-    await soul.at(2, 0).draw(ctx, 16, 64)
-    await bone.at(2, 1).draw(ctx, 0, 0)
+    await dark
+      .at(0, 2)
+      .flipped()
+      .then(_ => _.draw(ctx, 64, 32))
+    await dark.at(0, 2).draw(ctx, 0, 32)
+    await dark.at(1, 0).draw(ctx, 0, 64)
+    await dark.at(1, 0).draw(ctx, 64, 64)
+    await dark
+      .at(0, 2)
+      .rotated(-90)
+      .then(_ => _.draw(ctx, 0, 64))
+    await dark
+      .at(0, 2)
+      .rotated(-90)
+      .then(_ => _.flipped())
+      .then(_ => _.draw(ctx, 64, 64))
+    await soul
+      .at(1, 2)
+      .faded(0.5)
+      .then(_ => _.draw(ctx, 38, 38))
+    await soul
+      .at(1, 2)
+      .faded(0.5)
+      .then(_ => _.draw(ctx, 28, 28))
+    await bone.at(1, 2).draw(ctx, 32, 16)
+  }).then(s => (BUILDINGS[3]!.icon.value = s.data))
+  // SOUL GATE LOGO
+  Sprite.compose(128, 128, async ctx => {
+    await soul.at(2, 0).draw(ctx, 8, 4)
+    await soul.at(2, 0).draw(ctx, 8, 60)
+    await soul.at(2, 0).draw(ctx, 42, 60)
+    await soul.at(2, 0).draw(ctx, 42, 4)
+    await bone.at(2, 1).draw(ctx, 4, 0)
     await bone
       .at(2, 1)
       .flipped()
-      .then(_ => _.draw(ctx, 42, 0))
+      .then(_ => _.draw(ctx, 60, 0))
     await bone
       .at(0, 2)
       .flipped()
-      .then(_ => _.draw(ctx, 42, 64))
+      .then(_ => _.draw(ctx, 64, 64))
     await bone.at(0, 2).draw(ctx, 0, 64)
   }).then(s => (BUILDINGS[2]!.icon.value = s.data))
+  // TARTARUS GATE LOGO
   Sprite.compose(128, 128, async ctx => {
-    await ice.at(2, 0).draw(ctx, 16, 16)
+    await ice.at(2, 0).draw(ctx, 4, 4)
+    await ice.at(2, 0).draw(ctx, 60, 4)
+    await ice.at(2, 0).draw(ctx, 4, 60)
+    await ice.at(2, 0).draw(ctx, 60, 60)
     await bone.at(2, 1).draw(ctx, 0, 0)
     await bone
       .at(2, 1)
       .rotated(90)
-      .then(_ => _.draw(ctx, 42, 0))
+      .then(_ => _.draw(ctx, 64, 0))
     await bone
       .at(2, 1)
       .rotated(180)
-      .then(_ => _.draw(ctx, 42, 42))
+      .then(_ => _.draw(ctx, 64, 64))
     await bone
       .at(2, 1)
       .rotated(-90)
-      .then(_ => _.draw(ctx, 0, 42))
+      .then(_ => _.draw(ctx, 0, 64))
   }).then(s => (BUILDINGS[4]!.icon.value = s.data))
 })()
 
