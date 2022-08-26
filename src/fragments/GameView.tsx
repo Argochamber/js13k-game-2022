@@ -5,6 +5,7 @@ import { Dashboard } from '../views/Dashboard'
 import { Islands } from '../views/Islands'
 import { GlobalTabs } from './GlobalTabs'
 import { IslandsTab } from './IslandTabs'
+import { Island } from '../Island'
 
 type Props = { game: Game }
 
@@ -46,6 +47,8 @@ export const GameView = ({ game }: Props) => (
       <IslandsTab game={game} />
     </div>
     <div style={{ flex: 1 }}>
+      The {game.name} empire <span style={{ color: 'darkgray' }}>{Island.getIsland(game.selected[0], game.selected[1]).name}</span> <span style={{ color: 'gray' }}>{game.souls} souls</span>
+      <hr />
       <TabRoutes game={game} />
     </div>
     <div
