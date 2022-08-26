@@ -1,6 +1,7 @@
 import { Game } from '../Game'
+import { Island } from '../Island'
 import { Atlas, Sprite } from '../sprites'
-import { h, state } from '../ui'
+import { h, state, update } from '../ui'
 
 type Props = { game: Game }
 
@@ -20,25 +21,39 @@ const atlases = Object.entries({
 
 export const BUILDINGS = [
   {
-    id: 'headquarter',
+    id: 'hq',
     title: 'Head Quarters',
     icon: state<string | null>(null),
+    lore: `Your island reunion place.`,
+    tip: `Enhance the head quarters to continue evolving.`,
   },
   {
-    id: 'resurrect-altar',
+    id: 'altar',
     title: 'Resurrection Altar',
     icon: state<string | null>(null),
+    lore: `An altar for imbuing old corpses with souls, to make them move again.`,
+    tip: `Use the resurection altar to convert souls into revenants, your main workforce.`,
   },
-  { id: 'soul-gate', title: 'Soul Gate', icon: state<string | null>(null) },
   {
-    id: 'ritual-mound',
+    id: 'soulgate',
+    title: 'Soul Gate',
+    icon: state<string | null>(null),
+    lore: `The soul gate, a portal to another reality where souls from the living ones can be reaped.`,
+    tip: `This yields passive income of souls depending on level.`,
+  },
+  {
+    id: 'ritual',
     title: 'Ritual Mound',
     icon: state<string | null>(null),
+    lore: `The mound of the ritual sacrificie. Rituals are performed there in order to praise the higher gods.`,
+    tip: `Use the ritual mound to advance technology.`,
   },
   {
-    id: 'tartarus-gate',
+    id: 'tartarus',
     title: 'Tartarus Gate',
     icon: state<string | null>(null),
+    lore: `A gateway to the core of the earth, where all titans and other eldrich abobinations are kept.`,
+    tip: `Recruit special units with this building.`,
   },
 ] as const
 ;(async () => {
@@ -79,10 +94,6 @@ export const BUILDINGS = [
     await flesh
       .at(1, 2)
       .faded(0.3)
-      .then(_ => _.draw(ctx, 32, 0))
-    await flesh
-      .at(1, 2)
-      .faded(0.3)
       .then(_ => _.draw(ctx, 36, 6))
     await flesh
       .at(1, 2)
@@ -92,6 +103,8 @@ export const BUILDINGS = [
       .at(1, 2)
       .faded(0.3)
       .then(_ => _.draw(ctx, 28, 8))
+    ctx.globalCompositeOperation = 'multiply'
+    await dark.at(1, 2).draw(ctx, 32, 0)
   }).then(s => (BUILDINGS[1]!.icon.value = s.data))
   // RITUAL MOUND LOGO
   Sprite.compose(128, 128, async ctx => {
@@ -160,7 +173,7 @@ export const BUILDINGS = [
   }).then(s => (BUILDINGS[4]!.icon.value = s.data))
 })()
 
-export const Buildings = ({}: Props) => (
+export const Buildings = ({ game }: Props) => (
   <div>
     {BUILDINGS.map(building => (
       <div
@@ -171,6 +184,13 @@ export const Buildings = ({}: Props) => (
           marginBottom: '1rem',
           paddingTop: '1rem',
           alignItems: 'end',
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          const island = Island.getIsland(...game.selected)
+          island.buildings[building.id] += 1
+          Island.store(island)
+          update()
         }}
       >
         <img src={building.icon.value ?? ''} />
@@ -179,7 +199,12 @@ export const Buildings = ({}: Props) => (
             marginLeft: '1rem',
           }}
         >
-          {building.title}
+          <h1>
+            {building.title} - level{' '}
+            {Island.getIsland(...game.selected).buildings[building.id]}
+          </h1>
+          <p>{building.lore}</p>
+          <small>{building.tip}</small>
         </div>
       </div>
     ))}

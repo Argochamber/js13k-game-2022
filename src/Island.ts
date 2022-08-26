@@ -38,7 +38,7 @@ export class Island {
       const island = new Island(x, y)
       island.name = found.name
       island.owner = found.owner
-      island.soulGate = found.soulGate
+      island.buildings = found.buildings
       return island
     }
   }
@@ -79,7 +79,13 @@ export class Island {
   constructor(readonly x: number, readonly y: number) {}
   name = 'Island'
   owner: string | null = null
-  soulGate = 0
+  buildings = {
+    hq: 0,
+    altar: 0,
+    ritual: 0,
+    soulgate: 0,
+    tartarus: 0
+  }
   get seed() {
     return simplex(this.x, this.y)
   }

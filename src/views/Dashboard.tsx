@@ -13,7 +13,15 @@ export const Dashboard = ({ game }: Props) => {
       <hr />
       <div>
         <div>{island.name} overview</div>
-        <div>Soul Gate level: {island.soulGate}</div>
+        <div>
+          <h4>Buildings</h4>
+          <div>Headquarters: {island.buildings.hq}</div>
+          <div>Resurrection Altar: {island.buildings.altar}</div>
+          <div>Soul Gate: {island.buildings.soulgate}</div>
+          <div>Ritual Mound: {island.buildings.ritual}</div>
+          <div>Tartarus Gate: {island.buildings.tartarus}</div>
+          <hr />
+        </div>
       </div>
     </div>
   )
