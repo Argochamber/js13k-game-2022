@@ -6,6 +6,11 @@ function reset() {
   location.reload()
 }
 
+if (DEVELOPMENT) {
+  alert('The true fooers')
+  console.log('REMANS ABRT')
+}
+
 const Dev = () => (
   <div>
     <button onClick={reset} style={{ position: 'fixed', opacity: 0.5 }}>
