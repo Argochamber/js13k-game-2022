@@ -33,20 +33,44 @@ Sprite.compose(256, 256, async ctx => {
       })
     )
     .then(s => s.scaled(4, 4))
-    .then(s => s.noised(0.15))
+    .then(s => s.noised(0.1))
 
   await atlas
     .at(0, 1)
     .rotated(-90)
-    .then(_ => _.draw(ctx, 64, 0))
+    .then(_ => _.draw(ctx, 128, 64))
   await atlas
     .at(0, 1)
     .rotated(0)
-    .then(_ => _.draw(ctx, 0, 64))
+    .then(_ => _.draw(ctx, 64, 128))
   await atlas
     .at(1, 1)
     .rotated(0)
+    .then(_ => _.draw(ctx, 128, 128))
+  await atlas
+    .at(2, 0)
+    .rotated(0)
     .then(_ => _.draw(ctx, 64, 64))
+  await atlas
+    .at(1, 1)
+    .rotated(90)
+    .then(_ => _.draw(ctx, 0, 128))
+  await atlas
+    .at(0, 1)
+    .rotated(90)
+    .then(_ => _.draw(ctx, 0, 64))
+  await atlas
+    .at(1, 1)
+    .rotated(180)
+    .then(_ => _.draw(ctx, 0, 0))
+  await atlas
+    .at(0, 1)
+    .rotated(180)
+    .then(_ => _.draw(ctx, 64, 0))
+  await atlas
+    .at(1, 1)
+    .rotated(-90)
+    .then(_ => _.draw(ctx, 128, 0))
 }).then(s => (st.value = s.data))
 
 export const Buildings = ({}: Props) => (
