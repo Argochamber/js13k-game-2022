@@ -1,5 +1,6 @@
 {
   "name": "js13k_game_2022",
+  "description": "The Nekrium empire game, a web based, civilization-like simulation game. Slow paced.",
   "version": "1.0.0",
   "author": "sigmasoldi3r",
   "contributors": [
