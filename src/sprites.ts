@@ -2,6 +2,8 @@
   Sprite manipulation module.
 */
 
+import { from64, Vec2 } from './lib'
+
 /**
  * Creates the image so it can be loaded.
  */
@@ -15,24 +17,52 @@ export const loadImage = async (src: string) => {
   return node
 }
 
-type Vec2 = [number, number]
-type Vec4 = [number, number, number, number]
-type Palette = {
-  base: [Vec4, Vec4, Vec4, Vec4]
-  accent: [Vec4, Vec4, Vec4]
-  glint: [Vec4]
-}
+type Palette = [
+  number,
+  number,
+  number,
+  number, // PRIMARY
+  number,
+  number,
+  number,
+  number, // SECONDARY
+  number,
+  number,
+  number,
+  number, // SHADOW
+  number,
+  number,
+  number,
+  number, // DARK
+  number,
+  number,
+  number,
+  number, // ACCENT 1
+  number,
+  number,
+  number,
+  number, // ACCENT 2
+  number,
+  number,
+  number,
+  number, // ACCENT 3
+  number,
+  number,
+  number,
+  number // GLINT
+]
 
 const palette = {
-  ffffff: ['base', 0],
-  bfbfbf: ['base', 1],
-  '535353': ['base', 2],
-  '090909': ['base', 3],
-  ff0000: ['accent', 0],
-  '01ff00': ['accent', 1],
-  '0000ff': ['accent', 2],
-  ffff00: ['glint', 0],
-} as Record<string, ['base' | 'accent' | 'glint', 0 | 1 | 2 | 3]>
+  ffffff: 0,
+  bfbfbf: 1,
+  '535353': 2,
+  '090909': 3,
+  ff0000: 4,
+  '01ff00': 5,
+  '00ff00': 5,
+  '0000ff': 6,
+  ffff00: 7,
+} as Record<string, number>
 
 export const rgb2hex = (...c: number[]) =>
   c.map(_ => _.toString(16).padStart(2, '0')).join('')
@@ -52,6 +82,9 @@ export class Sprite {
   constructor(readonly data: string) {}
   image() {
     return loadImage(this.data)
+  }
+  plug() {
+    return Promise.resolve(this)
   }
   async noised(amount: number) {
     const image = await loadImage(this.data)
@@ -94,11 +127,10 @@ export class Sprite {
         const b = info.data[i + 2]!
         const color = palette[`${rgb2hex(r, g, b)}`]
         if (color != null) {
-          const c = target[color[0]][color[1]]!
-          info.data[i] = c[0]
-          info.data[i + 1] = c[1]
-          info.data[i + 2] = c[2]
-          info.data[i + 3] = c[3]
+          info.data[i] = target[color * 4 + 0]!
+          info.data[i + 1] = target[color * 4 + 1]!
+          info.data[i + 2] = target[color * 4 + 2]!
+          info.data[i + 3] = target[color * 4 + 3]!
         }
       }
       c.putImageData(info, 0, 0)
@@ -113,6 +145,24 @@ export class Sprite {
       c.translate(w / 2, h / 2)
       c.rotate((angle * Math.PI) / 180)
       c.drawImage(image, 0, 0, w, h, -w / 2, -h / 2, w, h)
+    })
+  }
+  async flipped() {
+    const image = await loadImage(this.data)
+    const w = image.naturalWidth
+    const h = image.naturalHeight
+    return Sprite.compose(w, h, async c => {
+      c.scale(-1, 1)
+      c.drawImage(image, -w, 0, w, h)
+    })
+  }
+  async faded(alpha: number) {
+    const image = await loadImage(this.data)
+    const w = image.naturalWidth
+    const h = image.naturalHeight
+    return Sprite.compose(w, h, async c => {
+      c.globalAlpha = alpha
+      c.drawImage(image, 0, 0, w, h)
     })
   }
   async draw(ctx: CanvasRenderingContext2D, dx = 0, dy = 0) {
@@ -169,10 +219,13 @@ export class Atlas {
       await rpm(this.tiles, spr => spr.scaled(...scale))
     )
   }
-  async colored(palette: Palette) {
+  async colored(palette: Palette | string) {
+    if (typeof palette === 'string') {
+      palette = from64(palette) as Palette
+    }
     return new Atlas(
       this.tileSize,
-      await rpm(this.tiles, spr => spr.colored(palette))
+      await rpm(this.tiles, spr => spr.colored(palette as Palette))
     )
   }
 }

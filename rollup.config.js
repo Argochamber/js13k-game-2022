@@ -11,6 +11,7 @@ import strip from '@rollup/plugin-strip'
 import replace from '@rollup/plugin-replace'
 import { EasyZip as Zip } from 'easy-zip'
 import path from 'path'
+const fs = require('fs')
 require('colors').enable()
 
 const DEVELOPMENT = !!process.env.DEVELOPMENT
@@ -20,7 +21,6 @@ const MAX_BUNDLE_SIZE = 13_000_000
 /** @returns {import('rollup').Plugin} */
 function makeZip() {
   const OUTPUT_ZIP = 'nekrium.zip'
-  const fs = require('fs')
   const bundle = new Zip()
   function add(file) {
     return new Promise(r => {
@@ -30,6 +30,7 @@ function makeZip() {
     })
   }
   return {
+    name: 'zipper',
     closeBundle() {
       Promise.all([
         add('index.js'),
