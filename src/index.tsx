@@ -1,8 +1,5 @@
 import { App } from './fragments/App'
 import { h, render } from './ui'
-import spr from './test.spr'
-
-spr().then(s => console.log(s))
 
 if (DEVELOPMENT) {
   function reset() {

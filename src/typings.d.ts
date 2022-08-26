@@ -4,7 +4,7 @@ declare module '*.txt' {
 }
 
 declare module '*.spr' {
-  const sprite: () => Promise<string>
+  const sprite: (palette: Record<string, import('./sprites').Atlas>) => Promise<import('./sprites').Sprite>
   export default sprite
 }
 

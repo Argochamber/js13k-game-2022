@@ -11,6 +11,7 @@ import strip from '@rollup/plugin-strip'
 import replace from '@rollup/plugin-replace'
 import { EasyZip as Zip } from 'easy-zip'
 import path from 'path'
+const fs = require('fs')
 require('colors').enable()
 
 const DEVELOPMENT = !!process.env.DEVELOPMENT
@@ -20,7 +21,6 @@ const MAX_BUNDLE_SIZE = 13_000_000
 /** @returns {import('rollup').Plugin} */
 function makeZip() {
   const OUTPUT_ZIP = 'nekrium.zip'
-  const fs = require('fs')
   const bundle = new Zip()
   function add(file) {
     return new Promise(r => {
@@ -69,7 +69,37 @@ function gourmad({} = {}) {
     name: 'Gourmad',
     load(id) {
       if (id.match(/\.spr$/)) {
-        return `export default async () => "foo"`
+        const target = { w: 0, h: 0 }
+        const code = fs
+          .readFileSync(id)
+          .toString()
+          .split('\n')
+          .map(line => line.trim())
+          .filter(line => line.length)
+          .map(line => {
+            const [cmd, ...args] = line.match(/[^ ]+/g)
+            switch (cmd) {
+              case 'blend':
+                return `ctx.globalCompositeOperation = '${args[0]}';`
+              case 'get':
+                return `await Promise.resolve(palette.${args[0]}.at(${args[1]}, ${args[2]}))`
+              case 'fade':
+                return `  .then(_=>_.faded(${args[0]}))`
+              case 'draw':
+                return `  .then(_=>_.draw(ctx, ${args[0]}, ${args[1]}));`
+              case 'flip':
+                return `  .then(_=>_.flipped())`
+              case '//':
+                return line
+              case 'target':
+                return ''
+            }
+            throw new SyntaxError(`\nUnexpected token at line:\n${line}`)
+          })
+          .join('\n  ')
+        return `import { Sprite } from './sprites';
+export default palette => Sprite.compose(${target.w}, ${target.h}, async ctx => {  ${code}
+})`
       }
       return null
     },
