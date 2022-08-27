@@ -7,6 +7,7 @@ import { Islands } from '../views/Islands'
 import { GlobalTabs } from './GlobalTabs'
 import { IslandsTab } from './IslandTabs'
 import { Island } from '../Island'
+import { Units } from '../views/Units'
 
 type Props = { game: Game }
 
@@ -16,6 +17,7 @@ const ROUTES = {
   incursions: null,
   buildings: Buildings,
   research: null,
+  units: Units,
 }
 
 const TabRoutes = ({ game }: Props) => {
@@ -53,7 +55,11 @@ export const GameView = ({ game }: Props) => (
       <IslandsTab game={game} />
     </div>
     <div style={{ flex: 1 }}>
-      The {game.name} empire <span style={{ color: 'darkgray' }}>{Island.getIsland(game.selected[0], game.selected[1]).name}</span> <span style={{ color: 'gray' }}>{game.souls} souls</span>
+      The {game.name} empire{' '}
+      <span style={{ color: 'darkgray' }}>
+        {Island.getIsland(game.selected[0], game.selected[1]).name}
+      </span>{' '}
+      <span style={{ color: 'gray' }}>{game.souls} souls</span>
       <hr />
       <TabRoutes game={game} />
     </div>

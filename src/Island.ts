@@ -86,6 +86,11 @@ export class Island {
     soulgate: 0,
     tartarus: 0
   }
+  units = {
+    revenant: 0,
+    acolyte: 0,
+    titan: 0
+  }
   get seed() {
     return simplex(this.x, this.y)
   }
