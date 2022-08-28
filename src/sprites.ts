@@ -2,6 +2,7 @@
   Sprite manipulation module.
 */
 
+import { spr } from './atlases'
 import { from64, Vec2 } from './lib'
 
 /**
@@ -66,6 +67,13 @@ const palette = {
 
 export const rgb2hex = (...c: number[]) =>
   c.map(_ => _.toString(16).padStart(2, '0')).join('')
+
+export const $ = async (
+  template: {
+    raw: ArrayLike<string> | readonly string[]
+  },
+  ...substitutions: any[]
+) => Sprite.compile(await spr, String.raw(template, ...substitutions))
 
 export class Sprite {
   static width = 128

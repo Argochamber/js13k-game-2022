@@ -1,7 +1,7 @@
 import { spr } from '../atlases'
 import { Game } from '../Game'
 import { Island } from '../Island'
-import { Sprite } from '../sprites'
+import { $, Sprite } from '../sprites'
 import { h, state, update } from '../ui'
 
 type Props = { game: Game }
@@ -46,105 +46,131 @@ export const BUILDINGS = [
 ;(async () => {
   // HEADQUARTERS LOGO
   Sprite.compose(128, 128, async ctx => {
-    await spr.dark
+    await (
+      await spr
+    ).dark
       .at(1, 1)
       .flipped()
       .then(_ => _.rotated(90))
       .then(_ => _.draw(ctx, 0, 0))
-    await spr.dark
+    await (
+      await spr
+    ).dark
       .at(1, 1)
       .flipped()
       .then(_ => _.draw(ctx, 0, 64))
-    await spr.dark.at(1, 1).draw(ctx, 64, 64)
-    await spr.dark
+    await (await spr).dark.at(1, 1).draw(ctx, 64, 64)
+    await (
+      await spr
+    ).dark
       .at(1, 1)
       .plug()
       .then(_ => _.rotated(270))
       .then(_ => _.draw(ctx, 64, 0))
-    await spr.bone.at(0, 0).draw(ctx, 32, 32)
+    await (await spr).bone.at(0, 0).draw(ctx, 32, 32)
   }).then(s => (BUILDINGS[0]!.icon.value = s.data))
   // RESURRECTION ALTAR LOGO
   Sprite.compose(128, 128, async ctx => {
-    await spr.bone
+    await (
+      await spr
+    ).bone
       .at(0, 2)
       .flipped()
       .then(_ => _.draw(ctx, 20, 64))
-    await spr.bone.at(0, 2).draw(ctx, 44, 64)
+    await (await spr).bone.at(0, 2).draw(ctx, 44, 64)
     ctx.globalCompositeOperation = 'source-atop'
-    await spr.flesh.at(0, 1).draw(ctx, 32, 40)
+    await (await spr).flesh.at(0, 1).draw(ctx, 32, 40)
     ctx.globalCompositeOperation = 'screen'
-    await spr.flesh
+    await (
+      await spr
+    ).flesh
       .at(1, 2)
       .faded(0.3)
       .then(_ => _.draw(ctx, 36, 6))
-    await spr.flesh
+    await (
+      await spr
+    ).flesh
       .at(1, 2)
       .faded(0.3)
       .then(_ => _.draw(ctx, 30, 4))
-    await spr.flesh
+    await (
+      await spr
+    ).flesh
       .at(1, 2)
       .faded(0.3)
       .then(_ => _.draw(ctx, 28, 8))
     ctx.globalCompositeOperation = 'multiply'
-    await spr.dark.at(1, 2).draw(ctx, 32, 0)
+    await (await spr).dark.at(1, 2).draw(ctx, 32, 0)
   }).then(s => (BUILDINGS[1]!.icon.value = s.data))
   // RITUAL MOUND LOGO
   Sprite.compose(128, 128, async ctx => {
-    await spr.dark
+    await (
+      await spr
+    ).dark
       .at(0, 2)
       .flipped()
       .then(_ => _.draw(ctx, 64, 32))
-    await spr.dark.at(0, 2).draw(ctx, 0, 32)
-    await spr.dark.at(1, 0).draw(ctx, 0, 64)
-    await spr.dark.at(1, 0).draw(ctx, 64, 64)
-    await spr.dark
+    await (await spr).dark.at(0, 2).draw(ctx, 0, 32)
+    await (await spr).dark.at(1, 0).draw(ctx, 0, 64)
+    await (await spr).dark.at(1, 0).draw(ctx, 64, 64)
+    await (
+      await spr
+    ).dark
       .at(0, 2)
       .rotated(-90)
       .then(_ => _.draw(ctx, 0, 64))
-    await spr.dark
+    await (
+      await spr
+    ).dark
       .at(0, 2)
       .rotated(-90)
       .then(_ => _.flipped())
       .then(_ => _.draw(ctx, 64, 64))
-    await spr.soul
+    await (
+      await spr
+    ).soul
       .at(1, 2)
       .faded(0.5)
       .then(_ => _.draw(ctx, 38, 38))
-    await spr.soul
+    await (
+      await spr
+    ).soul
       .at(1, 2)
       .faded(0.5)
       .then(_ => _.draw(ctx, 28, 28))
-    await spr.bone.at(1, 2).draw(ctx, 32, 16)
+    await (await spr).bone.at(1, 2).draw(ctx, 32, 16)
   }).then(s => (BUILDINGS[3]!.icon.value = s.data))
   // SOUL GATE LOGO
+
   Sprite.compose(128, 128, async ctx => {
-    await spr.soul.at(2, 0).draw(ctx, 8, 4)
-    await spr.soul.at(2, 0).draw(ctx, 8, 60)
-    await spr.soul.at(2, 0).draw(ctx, 42, 60)
-    await spr.soul.at(2, 0).draw(ctx, 42, 4)
-    await spr.bone.at(2, 1).draw(ctx, 4, 0)
-    await spr.bone
+    await (await spr).soul.at(2, 0).draw(ctx, 8, 4)
+    await (await spr).soul.at(2, 0).draw(ctx, 8, 60)
+    await (await spr).soul.at(2, 0).draw(ctx, 42, 60)
+    await (await spr).soul.at(2, 0).draw(ctx, 42, 4)
+    await (await spr).bone.at(2, 1).draw(ctx, 4, 0)
+    await (
+      await spr
+    ).bone
       .at(2, 1)
       .flipped()
       .then(_ => _.draw(ctx, 60, 0))
-    await spr.bone
+    await (
+      await spr
+    ).bone
       .at(0, 2)
       .flipped()
       .then(_ => _.draw(ctx, 64, 64))
-    await spr.bone.at(0, 2).draw(ctx, 0, 64)
+    await (await spr).bone.at(0, 2).draw(ctx, 0, 64)
   }).then(s => (BUILDINGS[2]!.icon.value = s.data))
   // TARTARUS GATE LOGO
-  Sprite.compile(
-    spr,
-    `t ice 2 0 d 4 4
+  $`t ice 2 0 d 4 4
 t ice 2 0 d 60 4
 t ice 2 0 d 4 60
 t ice 2 0 d 60 60
 t bone 2 1 d 0 0
 t bone 2 1 r 90 d 64 0
 t bone 2 1 r 180 d 64 64
-t bone 2 1 r -90 d 0 64`
-  ).then(s => (BUILDINGS[4]!.icon.value = s.data))
+t bone 2 1 r -90 d 0 64`.then(s => (BUILDINGS[4]!.icon.value = s.data))
 })()
 
 export const Buildings = ({ game }: Props) => (
