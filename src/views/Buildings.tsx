@@ -44,51 +44,51 @@ export const BUILDINGS = [
 ] as const
 ;(async () => {
   // HEADQUARTERS LOGO
-  $`t dark 1 1 f r 90 d 0 0
-t dark 1 1 f d 0 64
-t dark 1 1 d 64 64
-t dark 1 1 r 270 d 64 0
-t bone 0 0 d 32 32`.then(s => (BUILDINGS[0]!.icon.value = s.data))
+  $`*dark 1 1 f r 90 d 0 0
+*dark 1 1 f d 0 64
+*dark 1 1 d 64 64
+*dark 1 1 r 270 d 64 0
+*bone 0 0 d 32 32`.then(s => (BUILDINGS[0]!.icon.value = s.data))
   // RESURRECTION ALTAR LOGO
-  $`t bone 0 2 f d 20 64
-t bone 0 2 d 44 64
+  $`*bone 0 2 f d 20 64
+*bone 0 2 d 44 64
 @source-atop
-t flesh 0 1 d 32 40
+*flesh 0 1 d 32 40
 @screen
-t flesh 1 2 a 0.3 d 36 6
-t flesh 1 2 a 0.3 d 30 4
-t flesh 1 2 a 0.3 d 28 8
+*flesh 1 2 a 0.3 d 36 6
+*flesh 1 2 a 0.3 d 30 4
+*flesh 1 2 a 0.3 d 28 8
 @multiply
-t dark 1 2 d 32 0`.then(s => (BUILDINGS[1]!.icon.value = s.data))
+*dark 1 2 d 32 0`.then(s => (BUILDINGS[1]!.icon.value = s.data))
   // RITUAL MOUND LOGO
-  $`t dark 0 2 f d 64 32
-t dark 0 2 d 0 32
-t dark 1 0 d 0 64
-t dark 1 0 d 64 64
-t dark 0 2 r -90 d 0 64
-t dark 0 2 r -90 f d 64 64
-t soul 1 2 a 0.5 d 38 38
-t soul 1 2 a 0.5 d 28 28
-t bone 1 2 d 32 16`.then(s => (BUILDINGS[3]!.icon.value = s.data))
+  $`*dark 0 2 f d 64 32
+*dark 0 2 d 0 32
+*dark 1 0 d 0 64
+*dark 1 0 d 64 64
+*dark 0 2 r -90 d 0 64
+*dark 0 2 r -90 f d 64 64
+*soul 1 2 a 0.5 d 38 38
+*soul 1 2 a 0.5 d 28 28
+*bone 1 2 d 32 16`.then(s => (BUILDINGS[3]!.icon.value = s.data))
   // SOUL GATE LOGO
-  $`t soul 2 0 d 8 4
-t soul 2 0 d 8 60
-t soul 2 0 d 42 60
-t soul 2 0 d 42 4
-t soul 2 1 d 4 0
-t bone 2 1 d 0 0
-t bone 2 1 f d 60 0
-t bone 0 2 f d 64 64
-t bone 0 2 d 0 64`.then(s => (BUILDINGS[2]!.icon.value = s.data))
+  $`*soul 2 0 d 8 4
+*soul 2 0 d 8 60
+*soul 2 0 d 42 60
+*soul 2 0 d 42 4
+*soul 2 1 d 4 0
+*bone 2 1 d 0 0
+*bone 2 1 f d 60 0
+*bone 0 2 f d 64 64
+*bone 0 2 d 0 64`.then(s => (BUILDINGS[2]!.icon.value = s.data))
   // TARTARUS GATE LOGO
-  $`t ice 2 0 d 4 4
-t ice 2 0 d 60 4
-t ice 2 0 d 4 60
-t ice 2 0 d 60 60
-t bone 2 1 d 0 0
-t bone 2 1 r 90 d 64 0
-t bone 2 1 r 180 d 64 64
-t bone 2 1 r -90 d 0 64`.then(s => (BUILDINGS[4]!.icon.value = s.data))
+  $`*ice 2 0 d 4 4
+*ice 2 0 d 60 4
+*ice 2 0 d 4 60
+*ice 2 0 d 60 60
+*bone 2 1 d 0 0
+*bone 2 1 r 90 d 64 0
+*bone 2 1 r 180 d 64 64
+*bone 2 1 r -90 d 0 64`.then(s => (BUILDINGS[4]!.icon.value = s.data))
 })()
 
 export const Buildings = ({ game }: Props) => (

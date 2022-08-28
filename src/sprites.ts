@@ -264,14 +264,6 @@ export const $ = async (
     let state!: Sprite
     for (let tok = tokens.next(); !tok.done; tok = tokens.next()) {
       switch (tok.value) {
-        case 't':
-          {
-            const name = (tok = tokens.next()).value as keyof typeof s
-            const x = Number((tok = tokens.next()).value)
-            const y = Number((tok = tokens.next()).value)
-            state = s[name]!.at(x, y)
-          }
-          break
         case 'd':
           {
             const x = Number((tok = tokens.next()).value)
@@ -296,7 +288,12 @@ export const $ = async (
           break
         default:
           if (tok.value.match(/^@/)) {
-            ctx.globalCompositeOperation = tok.value.match(/[^@]+/)![0] as any
+            ctx.globalCompositeOperation = tok.value.slice(1) as any
+          } else if (tok.value.match(/^\*/)) {
+            const name = tok.value.slice(1) as keyof typeof s
+            const x = Number((tok = tokens.next()).value)
+            const y = Number((tok = tokens.next()).value)
+            state = s[name]!.at(x, y)
           }
       }
     }
