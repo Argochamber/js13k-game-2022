@@ -37,21 +37,8 @@ const TabRoutes = ({ game }: Props) => {
  * The central game's view (With tabs).
  */
 export const GameView = ({ game }: Props) => (
-  <div
-    style={{
-      display: 'flex',
-      width: 'calc(100% - 1rem)',
-      height: 'calc(100% - 1rem)',
-    }}
-  >
-    <div
-      style={{
-        borderRight: '1px solid gray',
-        paddingRight: '1rem',
-        marginRight: '1rem',
-        marginLeft: '1rem',
-      }}
-    >
+  <div className="flex full-block" style={{}}>
+    <div className="column-left">
       <IslandsTab game={game} />
     </div>
     <div style={{ flex: 1 }}>
@@ -63,14 +50,7 @@ export const GameView = ({ game }: Props) => (
       <hr />
       <TabRoutes game={game} />
     </div>
-    <div
-      style={{
-        borderLeft: '1px solid gray',
-        paddingLeft: '1rem',
-        marginLeft: '1rem',
-        marginRight: '1rem',
-      }}
-    >
+    <div className="column-right">
       <GlobalTabs game={game} />
     </div>
   </div>

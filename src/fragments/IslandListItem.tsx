@@ -2,25 +2,21 @@ import { Game } from '../Game'
 import { Island } from '../Island'
 import { h } from '../ui'
 
-type Props = { island: Island; game: Game }
+type Props = { island: Island; game: Game; image: string }
 
-export const IslandListItem = ({ island, game }: Props) => (
+export const IslandListItem = ({ image, island, game }: Props) => (
   <div>
-    <button
-      className={'island'}
+    <div
+      className="hover pointer"
       onClick={() => {
         game.selectIsland(island.x, island.y)
       }}
     >
-      <img
-        src={
-          'https://64.media.tumblr.com/12aec2f22e15922736a3f0b7f9ed6987/tumblr_oeyhctM7Kn1utamaho1_540.png'
-        }
-      />
+      <img className="sprite" src={image} />
       {island.name}{' '}
-      <span style={{ color: 'gray' }}>Level: {island.buildings.hq}</span>
+      <span className="secondary">Level: {island.buildings.hq}</span>
       <hr />
-    </button>
+    </div>
     <p />
   </div>
 )

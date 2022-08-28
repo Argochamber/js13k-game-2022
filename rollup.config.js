@@ -10,6 +10,7 @@ import { string } from 'rollup-plugin-string'
 import strip from '@rollup/plugin-strip'
 import replace from '@rollup/plugin-replace'
 import { EasyZip as Zip } from 'easy-zip'
+import css from 'rollup-plugin-import-css'
 import path from 'path'
 const fs = require('fs')
 require('colors').enable()
@@ -72,6 +73,7 @@ function getPlugins() {
     string({
       include: '**/*.txt',
     }),
+    css(),
     ts(),
     babel({
       comments: DEVELOPMENT,

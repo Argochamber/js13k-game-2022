@@ -10,18 +10,13 @@ type Props = { game: Game }
 const Tabs = ({ game }: Props) => {
   if (DEVELOPMENT) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+      <div className="flex col">
         {TABS.map(_ => {
           const active = _ === game.tab
           return (
             <button
               onClick={active ? () => {} : () => (game.tab = _)}
-              className={active ? 'btn-disabled' : ''}
+              className={active ? 'disabled' : ''}
             >
               {_}
             </button>
@@ -38,18 +33,13 @@ const Tabs = ({ game }: Props) => {
     )
   } else {
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+      <div className="flex col">
         {TABS.map(_ => {
           const active = _ === game.tab
           return (
             <button
               onClick={active ? () => {} : () => (game.tab = _)}
-              className={active ? 'btn-disabled' : ''}
+              className={active ? 'disabled' : ''}
             >
               {_}
             </button>
@@ -61,11 +51,7 @@ const Tabs = ({ game }: Props) => {
 }
 
 export const GlobalTabs = ({ game }: Props) => (
-  <div
-    style={{
-      borderBottom: '1px solid gray',
-    }}
-  >
+  <div className="ruler">
     <div>Global View</div>
     <hr />
     <Tabs game={game} />

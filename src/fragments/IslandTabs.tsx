@@ -8,25 +8,16 @@ export type Tab = typeof TABS[number]
 type Props = { game: Game }
 
 export const IslandsTab = ({ game }: Props) => (
-  <div
-    style={{
-      borderBottom: '1px solid gray',
-    }}
-  >
+  <div className="ruler">
     <div>Current Island</div>
     <hr />
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
+    <div className="flex col">
       {TABS.map(_ => {
         const active = _ === game.tab
         return (
           <button
             onClick={active ? () => {} : () => (game.tab = _ as Tab)}
-            className={active ? 'btn-disabled' : ''}
+            className={active ? 'disabled' : ''}
           >
             {_}
           </button>

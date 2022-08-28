@@ -177,14 +177,12 @@ export const Buildings = ({ game }: Props) => (
   <div>
     {BUILDINGS.map(building => (
       <div
+        className="flex pointer hover ruler"
         style={{
-          display: 'flex',
-          borderBottom: '2px solid gray',
           paddingBottom: '0.2rem',
           marginBottom: '1rem',
           paddingTop: '1rem',
           alignItems: 'end',
-          cursor: 'pointer',
         }}
         onClick={() => {
           const island = Island.getIsland(...game.selected)
@@ -193,12 +191,8 @@ export const Buildings = ({ game }: Props) => (
           update()
         }}
       >
-        <img src={building.icon.value ?? ''} />
-        <div
-          style={{
-            marginLeft: '1rem',
-          }}
-        >
+        <img className="sprite" src={building.icon.value ?? ''} />
+        <div>
           <h1>
             {building.title} - level{' '}
             {Island.getIsland(...game.selected).buildings[building.id]}

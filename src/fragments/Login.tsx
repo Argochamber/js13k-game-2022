@@ -10,12 +10,12 @@ export const Login = ({ onLogin }: Props) => (
       <input id="n" />
     </div>
     <hr />
-    <div style={{ width: '100%' }}>
+    <div className="wide">
       <button
+        className="wide"
         onClick={() =>
           onLogin((document.getElementById('n') as HTMLInputElement)!.value)
         }
-        style={{ width: '100%' }}
       >
         Create Empire
       </button>

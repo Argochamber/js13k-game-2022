@@ -1,5 +1,6 @@
 import { App } from './fragments/App'
 import { h, render } from './ui'
+import './styles.css'
 
 if (DEVELOPMENT) {
   function reset() {
