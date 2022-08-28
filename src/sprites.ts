@@ -68,6 +68,51 @@ export const rgb2hex = (...c: number[]) =>
   c.map(_ => _.toString(16).padStart(2, '0')).join('')
 
 export class Sprite {
+  static width = 128
+  static height = 128
+  static async compile(
+    atlases: Record<string, Atlas>,
+    str: string
+  ): Promise<Sprite> {
+    return Sprite.compose(Sprite.width, Sprite.height, async ctx => {
+      const tokens = (str.match(/[^ \n\r]+/g) ?? [])[Symbol.iterator]()
+      let state!: Sprite
+      for (let tok = tokens.next(); !tok.done; tok = tokens.next()) {
+        switch (tok.value) {
+          case 't':
+            {
+              const name = (tok = tokens.next()).value
+              const x = Number((tok = tokens.next()).value)
+              const y = Number((tok = tokens.next()).value)
+              state = atlases[name]!.at(x, y)
+            }
+            break
+          case 'd':
+            {
+              const x = Number((tok = tokens.next()).value)
+              const y = Number((tok = tokens.next()).value)
+              await state.draw(ctx, x, y)
+            }
+            break
+          case 'r':
+            {
+              const a = Number((tok = tokens.next()).value)
+              state = await state.rotated(a)
+            }
+            break
+          case 'f':
+            state = await state.flipped()
+            break
+          case 'a':
+            {
+              const a = Number((tok = tokens.next()).value)
+              state = await state.faded(a)
+            }
+            break
+        }
+      }
+    })
+  }
   static async compose(
     width: number,
     height: number,

@@ -1,6 +1,7 @@
 import { App } from './fragments/App'
 import { h, render } from './ui'
 import './styles.css'
+import { loadAtlases } from './atlases'
 
 if (DEVELOPMENT) {
   function reset() {
@@ -26,7 +27,7 @@ if (DEVELOPMENT) {
       </div>
     </div>
   )
-  render(Dev)
+  loadAtlases().then(() => render(Dev))
 } else {
-  render(App)
+  loadAtlases().then(() => render(App))
 }

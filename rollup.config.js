@@ -37,7 +37,7 @@ function makeZip() {
         add('index.js'),
         add('index.html'),
         add('sprites.png'),
-        add('styles.css'),
+        add('bundle.css'),
       ]).then(() => {
         bundle.writeToFile(path.join(DIST_FOLDER, OUTPUT_ZIP), () => {
           const stats = fs.statSync(path.join(DIST_FOLDER, OUTPUT_ZIP))
@@ -73,7 +73,9 @@ function getPlugins() {
     string({
       include: '**/*.txt',
     }),
-    css(),
+    css({
+      minify: !DEVELOPMENT,
+    }),
     ts(),
     babel({
       comments: DEVELOPMENT,
