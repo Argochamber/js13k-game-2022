@@ -115,6 +115,17 @@ export class Sprite {
       c.drawImage(img, 0, 0, w, h)
     })
   }
+  async tint(color: string, mode: GlobalCompositeOperation = 'multiply') {
+    const image = await loadImage(this.data)
+    const w = image.naturalWidth
+    const h = image.naturalHeight
+    return Sprite.compose(w, h, async c => {
+      c.drawImage(image, 0, 0)
+      c.globalCompositeOperation = mode
+      c.fillStyle = color
+      c.fillRect(0, 0, w, h)
+    })
+  }
   async colored(target: Palette) {
     const image = await loadImage(this.data)
     const w = image.naturalWidth

@@ -25,8 +25,8 @@ export class Island {
 
   /**
    * Returns the island residing in the given coordinates.
-   * @param x 
-   * @param y 
+   * @param x
+   * @param y
    * @returns island in the given coordinates
    */
   static getIsland(x: number, y: number): Island {
@@ -45,33 +45,45 @@ export class Island {
 
   /**
    * Returns the islands owned by the given player.
-   * @param owner 
+   * @param owner
    * @returns islands owned by this player
    */
   static getIslands(owner: String): Array<Island> {
     const islands = store.get<Record<string, Island>>('game.islands')
-    return islands ? Object.values(islands).filter(island => { return island.owner === owner }) : []
+    return islands
+      ? Object.values(islands)
+          .filter(island => {
+            return island.owner === owner
+          })
+          .map(i => {
+            return Island.getIsland(i.x, i.y)
+          })
+      : []
   }
 
   /**
    * Stores the given island into local storage.
-   * @param island 
+   * @param island
    */
-   static store(island: Island) {
+  static store(island: Island) {
     let islands = store.get<Record<string, Island>>('game.islands')
-    if (!islands) { islands = {} } // create storage object if it doesn't exist
+    if (!islands) {
+      islands = {}
+    } // create storage object if it doesn't exist
     islands[`${island.x}:${island.y}`] = island
     store.set('game.islands', islands) // store islands
   }
 
   /**
    * Removes the island in the given coordinates from local storage.
-   * @param x 
-   * @param y 
+   * @param x
+   * @param y
    */
   static remove(x: number, y: number) {
     const islands = store.get<Record<string, Island>>('game.islands')
-    if (!islands) { return } // do nothing if no object is found
+    if (!islands) {
+      return
+    } // do nothing if no object is found
     delete islands[`${x}:${y}`] // delete from object
     store.set('game.islands', islands) // store islands
   }
@@ -84,12 +96,12 @@ export class Island {
     altar: 0,
     ritual: 0,
     soulgate: 0,
-    tartarus: 0
+    tartarus: 0,
   }
   units = {
     revenant: 0,
     acolyte: 0,
-    titan: 0
+    titan: 0,
   }
   get seed() {
     return simplex(this.x, this.y)
