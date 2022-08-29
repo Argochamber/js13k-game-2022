@@ -1,5 +1,6 @@
 import { Game } from '../Game'
 import { Island } from '../Island'
+import { $ } from '../sprites'
 import { h, state } from '../ui'
 
 type Props = { game: Game }
@@ -27,6 +28,11 @@ const UNITS = [
     icon: state<null | string>(null),
   },
 ] as const
+
+{
+  $`*bone 1 2 d 64 0
+    *bone 1 2 d 32 0`.then(s => (UNITS[0].icon.value = s.data))
+}
 
 export const Units = ({ game }: Props) => {
   const island = Island.getIsland(...game.selected)

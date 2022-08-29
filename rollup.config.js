@@ -68,7 +68,10 @@ function getPlugins() {
   const shared = [
     node_resolve(),
     replace({
-      DEVELOPMENT,
+      values: {
+        DEVELOPMENT,
+      },
+      preventAssignment: true,
     }),
     string({
       include: '**/*.txt',
@@ -84,7 +87,13 @@ function getPlugins() {
     copy({
       targets: [{ src: 'static/**/*', dest: 'dist' }],
     }),
-    html(),
+    html({
+      options: {
+        shouldMinify(tpl) {
+          return tpl.tag === '$'
+        },
+      },
+    }),
   ]
   if (DEVELOPMENT) {
     return [
