@@ -33,6 +33,9 @@
   width: 128px;
   height: 128px;
 }
+.padded {
+  margin-bottom: 1rem;
+}
 
 /* Less semantic */
 .column-left {
