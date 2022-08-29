@@ -61,11 +61,8 @@ export const Units = ({ game }: Props) => {
       <hr />
       <div className="flex col">
         {UNITS.map(unit => (
-          <div className="flex ruler wide padded">
-            <img
-              src={unit.icon.value ?? ''}
-              style={{ width: '128px', height: '128px', marginRight: '1rem' }}
-            />
+          <div className="flex ruler wide padded pointer hover">
+            <img src={unit.icon.value ?? ''} className="sprite" />
             <div>
               <h3>{unit.name}</h3>
               <p>Amount: {island.units[unit.id]}</p>

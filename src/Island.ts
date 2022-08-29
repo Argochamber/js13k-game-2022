@@ -103,7 +103,46 @@ export class Island {
     acolyte: 0,
     titan: 0,
   }
+  queue = {
+    upgrade: {
+      hq: false,
+      altar: false,
+      ritual: false,
+      soulgate: false,
+      tartarus: false,
+    },
+    produce: {
+      revenant: 0,
+      acolyte: 0,
+      titan: 0,
+    },
+  }
   get seed() {
     return simplex(this.x, this.y)
+  }
+  productionCost(unit: keyof typeof this.queue.produce) {
+    switch (unit) {
+      case 'revenant':
+        return {
+          time: 1000,
+          souls: 1000,
+        }
+      case 'acolyte':
+        return {
+          time: 1000,
+          souls: 1000,
+        }
+      case 'titan':
+        return {
+          time: 1000,
+          souls: 1000,
+        }
+    }
+  }
+  upgradeCost(level: number) {
+    return {
+      time: (level + 1) * Math.PI * 100,
+      souls: (level + 1) * Math.E * 1000,
+    }
   }
 }
