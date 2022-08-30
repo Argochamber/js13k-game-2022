@@ -1,7 +1,8 @@
+import { toast } from '../fragments/GameView'
 import { Game } from '../Game'
 import { Island } from '../Island'
 import { $ } from '../sprites'
-import { h, state } from '../ui'
+import { h, state, update } from '../ui'
 
 type Props = { game: Game }
 
@@ -53,15 +54,32 @@ const UNITS = [
     *bone 1 2 d 32 8`.then(s => (UNITS[2].icon.value = s.data))
 }
 
+let lastTimer: NodeJS.Timeout | null = null
+
 export const Units = ({ game }: Props) => {
   const island = Island.getIsland(...game.selected)
+  const handleRecruit = (unit: typeof UNITS[number]) => () => {
+    island.units[unit.id] += 1
+    update()
+    toast.value = `Recruiting ${unit.name}...`
+    if (lastTimer != null) {
+      clearTimeout(lastTimer)
+    }
+    lastTimer = setTimeout(() => {
+      toast.value = null
+      lastTimer = null
+    }, 2000)
+  }
   return (
     <div>
       <h2>Units in {island.name}</h2>
       <hr />
       <div className="flex col">
         {UNITS.map(unit => (
-          <div className="flex ruler wide padded pointer hover">
+          <div
+            className="flex ruler wide padded pointer hover"
+            onClick={handleRecruit(unit)}
+          >
             <img src={unit.icon.value ?? ''} className="sprite" />
             <div>
               <h3>{unit.name}</h3>

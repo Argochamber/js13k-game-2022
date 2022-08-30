@@ -1,5 +1,5 @@
 import { Game } from '../Game'
-import { h } from '../ui'
+import { h, state } from '../ui'
 import { Buildings } from '../views/Buildings'
 import { ColorPicker } from '../views/ColorPicker'
 import { Dashboard } from '../views/Dashboard'
@@ -8,6 +8,8 @@ import { GlobalTabs } from './GlobalTabs'
 import { IslandsTab } from './IslandTabs'
 import { Island } from '../Island'
 import { Units } from '../views/Units'
+import { Toast } from './Toast'
+import { ReactNode } from 'react'
 
 type Props = { game: Game }
 
@@ -33,11 +35,16 @@ const TabRoutes = ({ game }: Props) => {
   return null
 }
 
+export const toast = state<null | ReactNode>(null)
+
 /**
  * The central game's view (With tabs).
  */
 export const GameView = ({ game }: Props) => (
   <div className="flex full-block" style={{}}>
+    <div style={{ position: 'absolute', top: '64px' }}>
+      {toast.value && <Toast>{toast.value}</Toast>}
+    </div>
     <div className="column-left">
       <IslandsTab game={game} />
     </div>

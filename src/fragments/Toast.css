@@ -1,0 +1,29 @@
+.toast {
+  justify-content: space-between;
+  width: 75vw;
+  position: fixed;
+  left: calc((100vw - 75vw) / 2);
+  animation: slide 0.5s ease-in-out;
+}
+
+.half {
+  width: 64px;
+  height: 128px;
+}
+
+.toast > .wide {
+  padding-top: 48px;
+  font-size: 28px;
+  text-align: center;
+  text-shadow: 0 0 18px black, 0 0 18px black, 0 0 18px black, 0 0 18px black,
+    0 0 18px black;
+}
+
+@keyframes slide {
+  0% {
+    top: -128px;
+  }
+  100% {
+    top: 64px;
+  }
+}
