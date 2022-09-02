@@ -98,8 +98,14 @@ export const Units = ({ game }: Props) => {
               {island.queue.produce[unit.id].queue > 0 ? (
                 <div>
                   <small>
-                    Currently {island.queue.produce[unit.id].queue} units in
-                    queue.
+                    Queued {island.queue.produce[unit.id].queue} units.
+                    Remaining time:{' '}
+                    {formatTime(
+                      island.queue.produce[unit.id].lastProduced.getTime() +
+                        island.productionCost(unit.id).time *
+                          island.queue.produce[unit.id].queue -
+                        Date.now()
+                    )}
                   </small>
                 </div>
               ) : null}

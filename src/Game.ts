@@ -123,13 +123,13 @@ export class Game {
           island.queue.produce[k].queue -= 1
           island.queue.produce[k].lastProduced = now
           island.units[k] += 1
-          island.store()
         }
       }
       const islands = Island.getIslands(this.name)
       this.souls += Math.floor(
         islands.reduce((a, b) => a + b.buildings.soulgate + 1, 0)
       )
+      island.store()
       update()
     }, 1000)
   }
