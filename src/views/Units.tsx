@@ -1,7 +1,8 @@
-import { toast } from '../fragments/GameView'
 import { Game } from '../Game'
 import { Island } from '../Island'
+import { formatTime } from '../lib'
 import { $ } from '../sprites'
+import { msg } from '../toastController'
 import { h, state, update } from '../ui'
 
 type Props = { game: Game }
@@ -54,22 +55,27 @@ const UNITS = [
     *bone 1 2 d 32 8`.then(s => (UNITS[2].icon.value = s.data))
 }
 
-let lastTimer: NodeJS.Timeout | null = null
-
 export const Units = ({ game }: Props) => {
-  const island = Island.getIsland(...game.selected)
+  const island = new Island(...game.selected).hydrate()
+
+  // On click
   const handleRecruit = (unit: typeof UNITS[number]) => () => {
-    island.units[unit.id] += 1
-    update()
-    toast.value = `Recruiting ${unit.name}...`
-    if (lastTimer != null) {
-      clearTimeout(lastTimer)
+    const cost = island.productionCost(unit.id)
+    if (cost.souls > game.souls) {
+      msg(`Not enough souls`)
+      return
     }
-    lastTimer = setTimeout(() => {
-      toast.value = null
-      lastTimer = null
-    }, 2000)
+    const queue = island.queue.produce[unit.id]
+    if (queue.queue === 0) {
+      queue.lastProduced = new Date()
+    }
+    queue.queue += 1
+    game.souls -= cost.souls
+    msg(`Recruiting ${unit.name}...`)
+    island.store()
+    update()
   }
+
   return (
     <div>
       <h2>Units in {island.name}</h2>
@@ -84,6 +90,19 @@ export const Units = ({ game }: Props) => {
             <div>
               <h3>{unit.name}</h3>
               <p>Amount: {island.units[unit.id]}</p>
+              <p>Cost: {island.productionCost(unit.id).souls} souls</p>
+              <p>
+                Production time:{' '}
+                {formatTime(island.productionCost(unit.id).time)}
+              </p>
+              {island.queue.produce[unit.id].queue > 0 ? (
+                <div>
+                  <small>
+                    Currently {island.queue.produce[unit.id].queue} units in
+                    queue.
+                  </small>
+                </div>
+              ) : null}
             </div>
           </div>
         ))}

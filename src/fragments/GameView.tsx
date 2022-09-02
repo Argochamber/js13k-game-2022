@@ -1,5 +1,5 @@
 import { Game } from '../Game'
-import { h, state } from '../ui'
+import { h } from '../ui'
 import { Buildings } from '../views/Buildings'
 import { ColorPicker } from '../views/ColorPicker'
 import { Dashboard } from '../views/Dashboard'
@@ -9,7 +9,7 @@ import { IslandsTab } from './IslandTabs'
 import { Island } from '../Island'
 import { Units } from '../views/Units'
 import { Toast } from './Toast'
-import { ReactNode } from 'react'
+import { toast } from '../toastController'
 
 type Props = { game: Game }
 
@@ -35,8 +35,6 @@ const TabRoutes = ({ game }: Props) => {
   return null
 }
 
-export const toast = state<null | ReactNode>(null)
-
 /**
  * The central game's view (With tabs).
  */
@@ -51,7 +49,7 @@ export const GameView = ({ game }: Props) => (
     <div style={{ flex: 1 }}>
       The {game.name} empire{' '}
       <span style={{ color: 'darkgray' }}>
-        {Island.getIsland(game.selected[0], game.selected[1]).name}
+        {new Island(game.selected[0], game.selected[1]).hydrate().name}
       </span>{' '}
       <span style={{ color: 'gray' }}>{game.souls} souls</span>
       <hr />

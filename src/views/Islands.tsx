@@ -23,7 +23,7 @@ export const genIslandAvatar = (island: Island) => {
 }
 
 export const Islands = ({ game }: Props) => {
-  const islands: Array<Island> = Island.getIslands(game.name)
+  const islands = Island.getIslands(game.name)
   for (const island of islands) {
     if (images[island.seed] == null) {
       images[island.seed] = state('')

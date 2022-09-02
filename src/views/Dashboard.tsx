@@ -9,7 +9,7 @@ let s = null as Island | null
 const avatar = state('')
 
 export const Dashboard = ({ game }: Props) => {
-  const island = Island.getIsland(game.selected[0], game.selected[1])
+  const island = new Island(game.selected[0], game.selected[1]).hydrate()
   if (s !== island) {
     genIslandAvatar(island).then(s => {
       if (avatar.value !== s.data) {

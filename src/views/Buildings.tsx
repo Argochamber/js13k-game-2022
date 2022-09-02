@@ -105,9 +105,9 @@ export const Buildings = ({ game }: Props) => (
           alignItems: 'end',
         }}
         onClick={() => {
-          const island = Island.getIsland(...game.selected)
+          const island = new Island(...game.selected).hydrate()
           island.buildings[building.id] += 1
-          Island.store(island)
+          island.store()
           update()
         }}
       >
@@ -115,7 +115,7 @@ export const Buildings = ({ game }: Props) => (
         <div>
           <h1>
             {building.title} - level{' '}
-            {Island.getIsland(...game.selected).buildings[building.id]}
+            {new Island(...game.selected).hydrate().buildings[building.id]}
           </h1>
           {/* <p>{building.lore}</p> */}
           <small>{building.tip}</small>
