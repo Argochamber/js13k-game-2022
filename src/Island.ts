@@ -170,7 +170,6 @@ export class Island<_Hydrated extends boolean = false> implements IslandInfo {
   /** Stores this to local. */
   store() {
     console.log(this.key, this)
-    store.set(this.key, this)
     const manifest =
       store.get<IslandManifest>(ISLAND_MANIFEST_STORAGE_KEY) ?? {}
     if (this.key in manifest) return
