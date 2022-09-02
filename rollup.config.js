@@ -10,6 +10,7 @@ import { string } from 'rollup-plugin-string'
 import strip from '@rollup/plugin-strip'
 import replace from '@rollup/plugin-replace'
 import { EasyZip as Zip } from 'easy-zip'
+import css from 'rollup-plugin-import-css'
 import path from 'path'
 const fs = require('fs')
 require('colors').enable()
@@ -36,7 +37,7 @@ function makeZip() {
         add('index.js'),
         add('index.html'),
         add('sprites.png'),
-        add('styles.css'),
+        add('bundle.css'),
       ]).then(() => {
         bundle.writeToFile(path.join(DIST_FOLDER, OUTPUT_ZIP), () => {
           const stats = fs.statSync(path.join(DIST_FOLDER, OUTPUT_ZIP))
@@ -67,10 +68,16 @@ function getPlugins() {
   const shared = [
     node_resolve(),
     replace({
-      DEVELOPMENT,
+      values: {
+        DEVELOPMENT,
+      },
+      preventAssignment: true,
     }),
     string({
       include: '**/*.txt',
+    }),
+    css({
+      minify: !DEVELOPMENT,
     }),
     ts(),
     babel({
@@ -80,7 +87,13 @@ function getPlugins() {
     copy({
       targets: [{ src: 'static/**/*', dest: 'dist' }],
     }),
-    html(),
+    html({
+      options: {
+        shouldMinify(tpl) {
+          return tpl.tag === '$'
+        },
+      },
+    }),
   ]
   if (DEVELOPMENT) {
     return [

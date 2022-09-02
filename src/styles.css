@@ -1,0 +1,75 @@
+/* Semantic elements */
+.pointer {
+  cursor: pointer;
+}
+.disabled {
+  cursor: default;
+  background-color: gray;
+  border-style: inset;
+}
+.hover:hover {
+  color: red;
+}
+.flex {
+  display: flex;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.col {
+  flex-direction: column;
+}
+.ruler {
+  border-bottom: 1px solid gray;
+}
+.wide {
+  width: 100%;
+}
+.secondary {
+  color: gray;
+}
+.sprite {
+  margin-right: 1rem;
+  width: 128px;
+  height: 128px;
+}
+.padded {
+  margin-bottom: 1rem;
+}
+
+/* Less semantic */
+.column-left {
+  border-right: 1px solid gray;
+  padding-right: 1rem;
+  margin-right: 1rem;
+  margin-left: 1rem;
+}
+.column-right {
+  border-left: 1px solid gray;
+  padding-left: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+.full-block {
+  width: calc(100% - 1rem);
+  height: calc(100% - 1rem);
+}
+
+/* Base */
+html,
+body,
+input,
+button {
+  font-family: 'Silkscreen', sans-serif;
+  border-radius: 0;
+}
+html,
+body {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  color: white;
+  background-color: black;
+}

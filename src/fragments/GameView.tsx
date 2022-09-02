@@ -7,6 +7,9 @@ import { Islands } from '../views/Islands'
 import { GlobalTabs } from './GlobalTabs'
 import { IslandsTab } from './IslandTabs'
 import { Island } from '../Island'
+import { Units } from '../views/Units'
+import { Toast } from './Toast'
+import { toast } from '../toastController'
 
 type Props = { game: Game }
 
@@ -16,6 +19,7 @@ const ROUTES = {
   incursions: null,
   buildings: Buildings,
   research: null,
+  units: Units,
 }
 
 const TabRoutes = ({ game }: Props) => {
@@ -35,36 +39,23 @@ const TabRoutes = ({ game }: Props) => {
  * The central game's view (With tabs).
  */
 export const GameView = ({ game }: Props) => (
-  <div
-    style={{
-      display: 'flex',
-      width: 'calc(100% - 1rem)',
-      height: 'calc(100% - 1rem)',
-    }}
-  >
-    <div
-      style={{
-        borderRight: '1px solid gray',
-        paddingRight: '1rem',
-        marginRight: '1rem',
-        marginLeft: '1rem',
-      }}
-    >
+  <div className="flex full-block" style={{}}>
+    <div style={{ position: 'absolute', top: '64px' }}>
+      {toast.value && <Toast>{toast.value}</Toast>}
+    </div>
+    <div className="column-left">
       <IslandsTab game={game} />
     </div>
     <div style={{ flex: 1 }}>
-      The {game.name} empire <span style={{ color: 'darkgray' }}>{Island.getIsland(game.selected[0], game.selected[1]).name}</span> <span style={{ color: 'gray' }}>{game.souls} souls</span>
+      The {game.name} empire{' '}
+      <span style={{ color: 'darkgray' }}>
+        {new Island(game.selected[0], game.selected[1]).hydrate().name}
+      </span>{' '}
+      <span style={{ color: 'gray' }}>{game.souls} souls</span>
       <hr />
       <TabRoutes game={game} />
     </div>
-    <div
-      style={{
-        borderLeft: '1px solid gray',
-        paddingLeft: '1rem',
-        marginLeft: '1rem',
-        marginRight: '1rem',
-      }}
-    >
+    <div className="column-right">
       <GlobalTabs game={game} />
     </div>
   </div>

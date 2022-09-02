@@ -5,7 +5,7 @@ import { Atom, h, state } from '../ui'
 type Props = {}
 
 const Input = ({ label, value }: { label: string; value: Atom<string> }) => (
-  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+  <div className="flex justify-between">
     <span>{label}</span>
     <input
       type="color"

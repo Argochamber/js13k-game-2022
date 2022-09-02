@@ -11,6 +11,9 @@ const createEmpire = (value: string) => {
 }
 
 export const App = () => {
+  if (!game.value?.running) {
+    game.value?.start()
+  }
   if (game.value == null) {
     return <Login onLogin={createEmpire} />
   } else {

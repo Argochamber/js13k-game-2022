@@ -1,7 +1,6 @@
 /*
   Sprite manipulation module.
 */
-
 import { from64, Vec2 } from './lib'
 
 /**
@@ -68,6 +67,8 @@ export const rgb2hex = (...c: number[]) =>
   c.map(_ => _.toString(16).padStart(2, '0')).join('')
 
 export class Sprite {
+  static width = 128
+  static height = 128
   static async compose(
     width: number,
     height: number,
@@ -112,6 +113,17 @@ export class Sprite {
     return Sprite.compose(w, h, async c => {
       c.imageSmoothingEnabled = false
       c.drawImage(img, 0, 0, w, h)
+    })
+  }
+  async tint(color: string, mode: GlobalCompositeOperation = 'multiply') {
+    const image = await loadImage(this.data)
+    const w = image.naturalWidth
+    const h = image.naturalHeight
+    return Sprite.compose(w, h, async c => {
+      c.drawImage(image, 0, 0)
+      c.globalCompositeOperation = mode
+      c.fillStyle = color
+      c.fillRect(0, 0, w, h)
     })
   }
   async colored(target: Palette) {
@@ -229,3 +241,71 @@ export class Atlas {
     )
   }
 }
+
+export const palettes = {
+  dark: 'PThG/15cZP//////AAAA/z04Rv8kHzH/JB8x/5qZlv8=',
+  soul: 'JqJp/zPRev+P8KT/0//E/zPRev8z0Xr/M9F6/4/wpP8=',
+  ice: 'HHHY/zWE5P+ZwfH//////5nB8f+ZwfH/mcHx/5nB8f8=',
+  bone: '5N3U/7qyp/9hW1L/CQkJ/+Td1P8AAAD/urKn//////8=',
+  flesh: '9mFR/+0zO//gGyT/wBwo/6UdLf+lHS3/pR0t/+0zO/8=',
+}
+
+export const spr: Promise<Record<keyof typeof palettes, Atlas>> = (async () => {
+  const spr: Record<keyof typeof palettes, Atlas> = {} as any
+  for (const [k, v] of Object.entries(palettes)) {
+    ;(spr as any)[k] = await Atlas.from('sprites.png', [16, 16])
+      .then(s => s.colored(v))
+      .then(s => s.scaled(4, 4))
+      .then(s => s.noised(0.1))
+  }
+  return spr
+})()
+
+export const $ = async (
+  template: {
+    raw: ArrayLike<string> | readonly string[]
+  },
+  ...substitutions: any[]
+) =>
+  Sprite.compose(Sprite.width, Sprite.height, async ctx => {
+    const s = await spr
+    const tokens = (String.raw(template, ...substitutions).match(
+      /[^ \n\r]+/g
+    ) ?? [])[Symbol.iterator]()
+    let state!: Sprite
+    for (let tok = tokens.next(); !tok.done; tok = tokens.next()) {
+      switch (tok.value) {
+        case 'd':
+          {
+            const x = Number((tok = tokens.next()).value)
+            const y = Number((tok = tokens.next()).value)
+            await state.draw(ctx, x, y)
+          }
+          break
+        case 'r':
+          {
+            const a = Number((tok = tokens.next()).value)
+            state = await state.rotated(a)
+          }
+          break
+        case 'f':
+          state = await state.flipped()
+          break
+        case 'a':
+          {
+            const a = Number((tok = tokens.next()).value)
+            state = await state.faded(a)
+          }
+          break
+        default:
+          if (tok.value.match(/^@/)) {
+            ctx.globalCompositeOperation = tok.value.slice(1) as any
+          } else if (tok.value.match(/^\*/)) {
+            const name = tok.value.slice(1) as keyof typeof s
+            const x = Number((tok = tokens.next()).value)
+            const y = Number((tok = tokens.next()).value)
+            state = s[name]!.at(x, y)
+          }
+      }
+    }
+  })
