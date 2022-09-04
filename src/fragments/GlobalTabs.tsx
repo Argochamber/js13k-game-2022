@@ -1,7 +1,7 @@
 import { Game } from '../Game'
 import { h } from '../ui'
 
-export const TABS = ['islands', 'incursions', 'research'] as const
+export const TABS = ['islands', 'exploration', 'incursions', 'research'] as const
 
 export type Tab = typeof TABS[number]
 

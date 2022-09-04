@@ -9,7 +9,7 @@ export const IslandListItem = ({ image, island, game }: Props) => (
     <div
       className="hover pointer"
       onClick={() => {
-        game.selectIsland(island.x, island.y)
+        game.select(island.x, island.y)
       }}
     >
       <img className="sprite" src={image} />

@@ -5,6 +5,7 @@ import { pairs, store } from './lib'
 import { update } from './ui'
 
 export type Tab = GlobalTab | IslandsTab
+export type Coordinates = [number, number]
 
 export interface Research {
   revenant: number
@@ -47,7 +48,7 @@ export class Game {
 
     return game
   }
-  selected: [number, number] = [0, 0]
+  selected: Coordinates = [0, 0]
   get name() {
     return store.get<string>('empire.name') ?? ''
   }
@@ -84,8 +85,10 @@ export class Game {
 
   /**
    * Selects the given island and changes to the island overview tab.
+   * @param x island x coordinate
+   * @param y island y coordinate
    */
-  selectIsland(x: number, y: number) {
+  select(x: number, y: number) {
     this.selected[0] = x
     this.selected[1] = y
     this.tab = TABS[0]
@@ -93,6 +96,30 @@ export class Game {
 
   get island() {
     return new Island(...this.selected).hydrate()
+  }
+
+  /**
+   * Adds the given island to the discoveries list.
+   * @param x island x coordinate
+   * @param y island y coordinate
+   */
+  discover(x: number, y: number) {
+    let discoveries: Array<Coordinates> = this.discoveries
+    
+    // check whether these coordinates already exist
+    discoveries.forEach(island => {
+      if (island[0] == x && island[1] == y) {
+        return // if it already exist, do not store
+      }
+    })
+    
+    // add a new discovery and store
+    discoveries.push([x, y])
+    store.set('empire.discoveries', discoveries)
+  }
+
+  get discoveries(): Array<Coordinates> {
+    return store.get<Array<Coordinates>>('empire.discoveries')!
   }
 
   private ev: NodeJS.Timer | null = null

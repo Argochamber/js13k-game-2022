@@ -4,6 +4,7 @@ import { Buildings } from '../views/Buildings'
 import { ColorPicker } from '../views/ColorPicker'
 import { Dashboard } from '../views/Dashboard'
 import { Islands } from '../views/Islands'
+import { Exploration } from '../views/Exploration'
 import { GlobalTabs } from './GlobalTabs'
 import { IslandsTab } from './IslandTabs'
 import { Island } from '../Island'
@@ -16,6 +17,7 @@ type Props = { game: Game }
 const ROUTES = {
   island: Dashboard,
   islands: Islands,
+  exploration: Exploration,
   incursions: null,
   buildings: Buildings,
   research: null,
