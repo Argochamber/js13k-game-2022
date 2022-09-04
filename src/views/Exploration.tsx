@@ -7,9 +7,19 @@ export const Exploration = ({ game }: Props) => {
   return (
     <div>
       <div>
-        Expeditions  <span style={{ color: 'darkgray' }}>0 in course</span> <span style={{ color: 'gray' }}>0 revenants available</span>
+        Expeditions  <span style={{ color: 'darkgray' }}>{game.expeditions.length} in course</span> <span style={{ color: 'gray' }}>0 revenants available</span>
         <hr/>
-        <button style={{ width: '100%' }}>Launch new expedition</button>
+        <button
+          style={{ width: '100%' }}
+          onClick={() => { game.launchExpedition(0, 0) }}
+          >
+            Launch new expedition
+          </button>
+        {game.expeditions.map(expedition => ( // TODO: make fragment
+          <div>
+            {Math.round((expedition.time.getTime() - Date.now()) / 1000)}
+          </div>
+        ))}
       </div>
       <div>
         <p/>

@@ -1,6 +1,7 @@
 import { Tab as GlobalTab } from './fragments/GlobalTabs'
 import { Tab as IslandsTab, TABS } from './fragments/IslandTabs'
 import { Island } from './Island'
+import { msg as toast } from './toastController' 
 import { pairs, store } from './lib'
 import { update } from './ui'
 
@@ -11,6 +12,11 @@ export interface Research {
   revenant: number
   acolyte: number
   titan: number
+}
+
+export interface Expedition {
+  island: Coordinates,
+  time: Date
 }
 
 /**
@@ -49,6 +55,7 @@ export class Game {
     return game
   }
   selected: Coordinates = [0, 0]
+  expeditions: Expedition[] = []
   get name() {
     return store.get<string>('empire.name') ?? ''
   }
@@ -99,6 +106,18 @@ export class Game {
   }
 
   /**
+   * Launches an expedition to the given coordinates.
+   * @param x x coordinate of starting point
+   * @param y y coordinate of starting point
+   */
+  launchExpedition(x: number, y: number) {
+    toast('New exploration expedition launched')
+    // TODO: check available revenants
+    // TODO: subtract revenant
+    this.expeditions.push({ island: [x, y], time: new Date(Date.now() + (10000 + Math.random() * 50000)) })
+  }
+
+  /**
    * Adds the given island to the discoveries list.
    * @param x island x coordinate
    * @param y island y coordinate
@@ -107,11 +126,11 @@ export class Game {
     let discoveries: Array<Coordinates> = this.discoveries
     
     // check whether these coordinates already exist
-    discoveries.forEach(island => {
-      if (island[0] == x && island[1] == y) {
-        return // if it already exist, do not store
-      }
-    })
+    for (let i = 0; i < discoveries.length; i++) {
+      let island = discoveries[i]
+      if (island == null) { continue } // TODO: discuss how to properly implement this
+      if (island[0] == x && island[1] == y) { return } // if it already exists, do not store
+    }
     
     // add a new discovery and store
     discoveries.push([x, y])
@@ -138,9 +157,10 @@ export class Game {
    * Each game tick is roughly one second.
    */
   start() {
-    // Process production queues:
     this.ev = setInterval(() => {
       const now = new Date()
+
+      // Process production queues:
       const island = this.island
       for (const [k, v] of pairs(this.island.queue.produce)) {
         if (v.queue <= 0) continue
@@ -157,6 +177,17 @@ export class Game {
         islands.reduce((a, b) => a + b.buildings.soulgate + 1, 0)
       )
       island.store()
+
+      // Process expeditions:
+      // TODO: couldn't replicate structure above since v was being casted as number | Expedition instead of only Expedition
+      for (let i = 0; i < this.expeditions.length; i++) {
+        if ((this.expeditions[i]?.time ?? new Date()) > now) { continue } // TODO: discuss how to better deal with possible undefined
+        // TODO: discover island and check whether the revenant returns, continues or dies
+        toast('Expedition ended')
+        this.expeditions.splice(i, 1)
+      }
+
+      // Update game
       update()
     }, 1000)
   }
